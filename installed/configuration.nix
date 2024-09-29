@@ -14,7 +14,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth.enable = true;
-  #boot.initrd.systemd.enable = true;
 
   networking = {
     # Pick only one of the below networking options.
@@ -52,10 +51,14 @@
   # };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-
-  
+  services.xserver = {
+    enable = true;
+    displayManager.lightdm.enable = true;
+    desktopManager = {
+      cinnamon.enable = true;
+    };
+  };
+  services.displayManager.defaultSession = "cinnamon";
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
@@ -65,17 +68,17 @@
   services.printing.enable = true;
 
   # Enable sound.
-  # hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = true;
   # OR
-  sound.enable = true;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
+  #sound.enable = true;
+  #security.rtkit.enable = true;
+  #services.pipewire = {
+  #  enable = true;
+  #  alsa.enable = true;
+  #  alsa.support32Bit = true;
+  #  pulse.enable = true;
+  #  jack.enable = true;
+  #};
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = false;
@@ -91,38 +94,21 @@
     ];
    };
   users.users.root.initialHashedPassword = "";
+  security.sudo.wheelNeedsPassword = false;
 
   nixpkgs.config.allowUnfree = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    alacritty
-    bemenu
-    dunst
-    eww
-    fuzzel
     gitFull
-    kitty
-    libnotify
     neovim
     plymouth
-    rofi-wayland
-    swww
-    tofi
-    wezterm
-    wofi
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    waybar
     wget
   ];
-  xdg.portal = {
-	enable = true;
-	extraPortals = [ pkgs.xdg-desktop-portal-gtk  ];
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  programs.hyprland.enable = true;
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
