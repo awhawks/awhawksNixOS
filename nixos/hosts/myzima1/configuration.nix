@@ -2,24 +2,27 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ... }:
+{ config, inputs, outputs, lib, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
     ];
 
   #nix = {
-  #  package = pkgs.nixFlakes;
-  #  settings.experimental-features = [ "nix-command" "flakes" ];
+    #package = pkgs.nixFlakes;
+    #settings = {
+        #experimental-features = [ "nix-command" "flakes" ];
+    #};
   #};
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "myzimaboard"; # Define your hostname.
+  networking.hostName = "myzima1"; # Define your hostname.
   networking.hostId = "31415926"; # CHANGE ME
 
   # Enable networking
@@ -79,10 +82,11 @@
   };
   users.users.awhawks = {
     isNormalUser = true;
+    initialPassword = "badPassw0rd";
     description = "Adam W. Hawk";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
+        inputs.home-manager.packages.${pkgs.system}.default
     ];
     openssh.authorizedKeys.keys =
     [
@@ -123,11 +127,20 @@
     podman
     podman-compose
     rrsync
+    unixtools.netstat
     unzip
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     zip
   ];
+
+  home-manager = {
+    useUserPackages = true;
+    extraSpecialArgs = { inherit inputs outputs; };
+    users.awhawks =
+      import ../../home/awhawks/${config.networking.hostName}.nix;
+  };
+
 
   services.tailscale.enable = true;
   networking.nameservers = [ "100.100.100.100" "8.8.8.8" "1.1.1.1" ];

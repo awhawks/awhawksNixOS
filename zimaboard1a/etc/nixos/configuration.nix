@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-
+  nix.settings.trusted-users = [ "root" "awhawks" ];
   #nix = {
   #  package = pkgs.nixFlakes;
   #  settings.experimental-features = [ "nix-command" "flakes" ];
@@ -19,7 +19,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "myzimaboard"; # Define your hostname.
+  networking.hostName = "myzima1"; # Define your hostname.
   networking.hostId = "31415926"; # CHANGE ME
 
   # Enable networking
