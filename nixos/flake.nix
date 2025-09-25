@@ -9,12 +9,12 @@
     };
 
     outputs = { nixpkgs, disko, ... }: {
-        nixosConfiguration.p50 = nixpkgs.lib.nixosSystem {
+        nixosConfiguration.myzimaboard1a = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             modules = [
                 disko.nixosModules.disko # use disko module
-                ./configuration.nix # regular nixos config
-                ./disk-config.nix
+                ./myzimaboard1a-configuration.nix # regular nixos config
+                ./myzimaboard1a-disk-config.nix
             ];
         };
     };
