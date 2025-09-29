@@ -5,18 +5,38 @@
 { config, inputs, outputs, lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
+  ];
 
-  #nix = {
+  sops = {
+    # This will add secrets.yml to the nix store
+    # You can avoid this by adding a string to the full path instead, i.e.
+    # sops.defaultSopsFile = "/root/.sops/secrets/example.yaml";
+    defaultSopsFile = ../../secrets.yaml;
+    validateSopsFiles = false;
+    # This will automatically import SSH keys as age keys
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    # This is using an age key that is expected to already be in the filesystem
+    age.keyFile = "/var/lib/sops-nix/key.txt";
+    # This will generate a new key if the key specified above does not exist
+    age.generateKey = true;
+    # This is the actual specification of the secrets.
+    secrets.awhawks-ed25519-public = {};
+    secrets.awhawks-ed25519-private = {};
+    secrets.awhawks-rsa-public = {};
+    secrets.awhawks-rsa-private = {};
+  };
+
+  nix = {
     #package = pkgs.nixFlakes;
-    #settings = {
+    settings = {
         #experimental-features = [ "nix-command" "flakes" ];
-    #};
-  #};
+	    trusted-users = [ "root" "awhawks" ];
+    };
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -111,8 +131,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    age
-    agenix-cli
     bcompare
     compose2nix
     disko
@@ -127,6 +145,7 @@
     podman
     podman-compose
     rrsync
+    ssh-to-age
     unixtools.netstat
     unzip
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
