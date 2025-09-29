@@ -11,20 +11,25 @@
   '';
 
   inputs = {
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
-    disko = {
-        url = "github:nix-community/disko";
-        inputs.nixpkgs.follows = "nixpkgs";
-    };
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, home-manager, nixpkgs, disko, ... } @inputs:
+  outputs = { self, agenix, disko, home-manager, nixpkgs, nixpkgs-stable, sops-nix, ... } @inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -43,7 +48,9 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/myzima1
-            inputs.disko.nixosModules.disko
+            agenix.nixosModules.default
+            disko.nixosModules.disko
+            sops-nix.nixosModules.sops
           ];
         };
       };

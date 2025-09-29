@@ -5,18 +5,44 @@
 { config, inputs, outputs, lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
+  ];
 
-  #nix = {
+  sops = {
+    # This will add secrets.yml to the nix store
+    # You can avoid this by adding a string to the full path instead, i.e.
+    # sops.defaultSopsFile = "/root/.sops/secrets/example.yaml";
+    defaultSopsFile = ../../secrets/myzima1/secrets.yaml;
+    validateSopsFiles = false;
+    # This will automatically import SSH keys as age keys
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    # This is using an age key that is expected to already be in the filesystem
+    #age.keyFile = "/var/lib/sops-nix/key.txt";
+    # This will generate a new key if the key specified above does not exist
+    #age.generateKey = false;
+    # This is the actual specification of the secrets.
+    secrets = {
+        awhawks-hashed-password.neededForUsers = true;
+        awhawks-hashed-password = {};
+        root-hashed-password.neededForUsers = true;
+        root-hashed-password = {};
+        "private-keys/awhawks-ed25519-public" = {};
+        "private-keys/awhawks-ed25519-private" = {};
+        "private-keys/awhawks-rsa-public" = {};
+        "private-keys/awhawks-rsa-private" = {};
+    };
+  };
+
+  nix = {
     #package = pkgs.nixFlakes;
-    #settings = {
+    settings = {
         #experimental-features = [ "nix-command" "flakes" ];
-    #};
-  #};
+	    trusted-users = [ "root" "awhawks" ];
+    };
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -74,6 +100,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.mutableUsers = false;
   users.users.backup = {
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
@@ -82,7 +109,7 @@
   };
   users.users.awhawks = {
     isNormalUser = true;
-    initialPassword = "badPassw0rd";
+    hashedPasswordFile = config.sops.secrets.awhawks-hashed-password.path;
     description = "Adam W. Hawk";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
@@ -90,15 +117,20 @@
     ];
     openssh.authorizedKeys.keys =
     [
-        # change this to your ssh key
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR awhawks@p17"
+      # change this to your ssh key
+      #( builtins.readFile config.sops.secrets."private-keys/awhawks-rsa-public".path )
+      #( builtins.readFile config.sops.secrets."private-keys/awhawks-ed25519-public".path )
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR awhawks@p17"
     ];
   };
 
   users.users.root = {
+    hashedPasswordFile = config.sops.secrets.root-hashed-password.path;
     openssh.authorizedKeys.keys =
     [
       # change this to your ssh key
+      #( builtins.readFile config.sops.secrets."private-keys/awhawks-rsa-public".path )
+      #( builtins.readFile config.sops.secrets."private-keys/awhawks-ed25519-public".path )
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR awhawks@p17"
     ];
   };
@@ -111,8 +143,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    age
-    agenix-cli
     bcompare
     compose2nix
     disko
@@ -127,6 +157,7 @@
     podman
     podman-compose
     rrsync
+    ssh-to-age
     unixtools.netstat
     unzip
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -145,7 +176,6 @@
   services.tailscale.enable = true;
   networking.nameservers = [ "100.100.100.100" "8.8.8.8" "1.1.1.1" ];
   networking.search = [ "pufferfish-bellatrix.ts.net" ];
-
 
   services.headscale = {
     enable  = false;

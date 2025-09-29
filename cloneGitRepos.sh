@@ -31,9 +31,22 @@ function cloneit() {
 
 #cloneit awhawks/awhawksNixOS
 cloneit cachix/devenv
+cloneit EmergentMind/nix-assets
+cloneit EmergentMind/nix-config
+cloneit EmergentMind/nix-config-starter
+cloneit EmergentMind/nix-secrets-reference
+
 cloneit jnsgruk/nixos-config
 cloneit librephoenix/nixos-config
 cloneit mdlayher/homelab
+cloneit Mic92/dotfiles
+cloneit Mic92/flake-fmt
+cloneit Mic92/flake-linter
+cloneit Mic92/nix-configs
+cloneit Mic92/nix-update
+cloneit Mic92/ssh-to-age
+cloneit Mic92/ssh-to-pgp
+cloneit Mic92/sops-nix
 cloneit Misterio77/flake-config
 cloneit Misterio77/jenkins-nixos-tf
 cloneit Misterio77/nix-config
