@@ -20,12 +20,14 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    nixarr.url = "github:rasmus-kirk/nixarr";
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
   };
 
-  outputs = { self, agenix, disko, home-manager, nixpkgs, nixpkgs-stable, ... } @inputs:
+  outputs = { self, agenix, disko, home-manager, nixarr, nixpkgs, nixpkgs-stable, ... } @inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -46,6 +48,7 @@
             ./hosts/myzima1
             agenix.nixosModules.default
             disko.nixosModules.disko
+            nixarr.nixosModules.default
           ];
         };
       };
