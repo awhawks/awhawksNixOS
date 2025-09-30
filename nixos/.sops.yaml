@@ -4,11 +4,12 @@ keys:
   - &hosts:
     - &myzima1 age1pxma9905reu8c09s6l7t6hdvn4q2f69kh9hvdw3yjfg84zky9qqs8mlwu5
 creation_rules:
-  - path_regex: secrets/awhawks/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: secrets/awhawks/.*[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
     - age:
         - *awhawks
-  - path_regex: secrets/myzima1/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: secrets/myzima1/.*[^/]+\.(yaml|json|env|ini|conf)$
     key_groups:
       - age:
           - *myzima1
+          - *awhawks

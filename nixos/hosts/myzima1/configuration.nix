@@ -33,6 +33,12 @@
         "private-keys/awhawks-ed25519-private" = {};
         "private-keys/awhawks-rsa-public" = {};
         "private-keys/awhawks-rsa-private" = {};
+        pia-wg = {
+            # The sops file can be also overwritten per secret...
+            sopsFile = ../../secrets/myzima1/PIA-Switzerland-1759188478.conf;
+            # ... as well as the format
+            format = "binary";
+        };
     };
   };
 
