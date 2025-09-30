@@ -11,7 +11,6 @@
   '';
 
   inputs = {
-
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -24,12 +23,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, agenix, disko, home-manager, nixpkgs, nixpkgs-stable, sops-nix, ... } @inputs:
+  outputs = { self, agenix, disko, home-manager, nixpkgs, nixpkgs-stable, ... } @inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -50,7 +46,6 @@
             ./hosts/myzima1
             agenix.nixosModules.default
             disko.nixosModules.disko
-            sops-nix.nixosModules.sops
           ];
         };
       };

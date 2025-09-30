@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-#!/run/current-system/sw/bin/env bash
-
 #set -x
 set -e
+set -u
 set -o errexit
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -15,11 +14,10 @@ then
     exit 1
 fi
 
-if ! command -v nixos-rebuild >/dev/null 2>&1
+if [ $# -ne 1 ]
 then
-    echo "nixos-rebuild could not be found"
-    exit 1
+  echo "you must provide an age file"
+  exit 13
 fi
 
-nix flake check --all-systems
-nixos-rebuild boot --flake .#myzima1 --target-host myzima1a --use-remote-sudo
+nix run github:ryantm/agenix -- -e $1

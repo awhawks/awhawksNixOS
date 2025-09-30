@@ -3,44 +3,11 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, inputs, outputs, lib, pkgs, ... }:
-
 {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
-    inputs.sops-nix.nixosModules.sops
   ];
-
-  sops = {
-    # This will add secrets.yml to the nix store
-    # You can avoid this by adding a string to the full path instead, i.e.
-    # sops.defaultSopsFile = "/root/.sops/secrets/example.yaml";
-    defaultSopsFile = ../../secrets/myzima1/secrets.yaml;
-    validateSopsFiles = false;
-    # This will automatically import SSH keys as age keys
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-    # This is using an age key that is expected to already be in the filesystem
-    #age.keyFile = "/var/lib/sops-nix/key.txt";
-    # This will generate a new key if the key specified above does not exist
-    #age.generateKey = false;
-    # This is the actual specification of the secrets.
-    secrets = {
-        awhawks-hashed-password.neededForUsers = true;
-        awhawks-hashed-password = {};
-        root-hashed-password.neededForUsers = true;
-        root-hashed-password = {};
-        "private-keys/awhawks-ed25519-public" = {};
-        "private-keys/awhawks-ed25519-private" = {};
-        "private-keys/awhawks-rsa-public" = {};
-        "private-keys/awhawks-rsa-private" = {};
-        pia-wg = {
-            # The sops file can be also overwritten per secret...
-            sopsFile = ../../secrets/myzima1/PIA-Switzerland-1759188478.conf;
-            # ... as well as the format
-            format = "binary";
-        };
-    };
-  };
 
   nix = {
     #package = pkgs.nixFlakes;
@@ -110,12 +77,12 @@
   users.users.backup = {
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
-      ''command="${pkgs.rrsync}/bin/rrsync /rsync/backups/",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR''
+      ''command="${pkgs.rrsync}/bin/rrsync /rsync/backups/",restrict ${( builtins.readFile ../../secrets/myzima1/awhawks-ed25519-public )}''
     ];
   };
   users.users.awhawks = {
     isNormalUser = true;
-    hashedPasswordFile = config.sops.secrets.awhawks-hashed-password.path;
+    hashedPasswordFile = config.age.secrets.hashed-password-awhawks.path;
     description = "Adam W. Hawk";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
@@ -124,20 +91,18 @@
     openssh.authorizedKeys.keys =
     [
       # change this to your ssh key
-      #( builtins.readFile config.sops.secrets."private-keys/awhawks-rsa-public".path )
-      #( builtins.readFile config.sops.secrets."private-keys/awhawks-ed25519-public".path )
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR awhawks@p17"
+      ( builtins.readFile ../../secrets/myzima1/awhawks-rsa-public )
+      ( builtins.readFile ../../secrets/myzima1/awhawks-ed25519-public )
     ];
   };
 
   users.users.root = {
-    hashedPasswordFile = config.sops.secrets.root-hashed-password.path;
+    hashedPasswordFile = config.age.secrets.hashed-password-root.path;
     openssh.authorizedKeys.keys =
     [
       # change this to your ssh key
-      #( builtins.readFile config.sops.secrets."private-keys/awhawks-rsa-public".path )
-      #( builtins.readFile config.sops.secrets."private-keys/awhawks-ed25519-public".path )
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR awhawks@p17"
+      ( builtins.readFile ../../secrets/myzima1/awhawks-rsa-public )
+      ( builtins.readFile ../../secrets/myzima1/awhawks-ed25519-public )
     ];
   };
 
