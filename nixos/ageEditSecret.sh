@@ -6,7 +6,7 @@ set -o errexit
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-cd ${scriptDir} || exit 13
+cd ${scriptDir}/secrets || exit 13
 
 if ! command -v nix >/dev/null 2>&1
 then
@@ -20,4 +20,10 @@ then
   exit 13
 fi
 
-nix run github:ryantm/agenix -- -e $1
+if [ -z "${EDITOR+x}" ]
+then
+  export EDITOR="vi"
+fi
+
+ageFile=${1//secrets\//}
+nix run github:ryantm/agenix -- -e "${ageFile}"

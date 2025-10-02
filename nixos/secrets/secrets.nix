@@ -9,4 +9,6 @@ in {
     "hashed-password-root.age".publicKeys = [ myzima1HostKeyPub awhawksKeyPub ];
     "hashed-password-awhawks.age".publicKeys = [ myzima1HostKeyPub awhawksKeyPub ];
     "pia-switzerland.age".publicKeys = [ myzima1HostKeyPub awhawksKeyPub ];
+    "pia-ca-cert.age".publicKeys = [ myzima1HostKeyPub awhawksKeyPub ];
+    "pia-user-pass.age".publicKeys = [ myzima1HostKeyPub awhawksKeyPub ];
 }

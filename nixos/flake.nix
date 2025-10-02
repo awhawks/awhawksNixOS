@@ -11,23 +11,26 @@
   '';
 
   inputs = {
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nix-pia-vpn.url = "github:rcambrj/nix-pia-vpn";
+    nix-pia-vpn.inputs.nixpkgs.follows = "nixpkgs";
 
     nixarr.url = "github:rasmus-kirk/nixarr";
+    nixarr.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
   };
 
-  outputs = { self, agenix, disko, home-manager, nixarr, nixpkgs, nixpkgs-stable, ... } @inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, home-manager, ... } @inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -46,9 +49,16 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/myzima1
-            agenix.nixosModules.default
-            disko.nixosModules.disko
-            nixarr.nixosModules.default
+            inputs.agenix.nixosModules.default
+            inputs.disko.nixosModules.disko
+            inputs.nixarr.nixosModules.default
+            #TODO inputs.nix-pia-vpn.nixosModules.default {
+            #TODO   services.pia-vpn = {
+            #TODO     enable = true;
+            #TODO     certificateFile = inputs.agenix.nixosModules.default.age.secrets.pia-ca-cert.path;
+            #TODO     environmentFile = inputs.agenix.nixosModules.default.age.secrets.pia-user-pass.path; # use sops-nix or agenix
+            #TODO   };
+            #TODO }
           ];
         };
       };

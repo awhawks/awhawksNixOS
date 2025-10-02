@@ -40,6 +40,7 @@
     ../common
     ./configuration.nix
     ./secrets.nix
+    ./arrstack.nix
   ];
 }
 

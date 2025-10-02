@@ -119,17 +119,22 @@
     disko
     dive
     file
+    firefox
     gh
     git
     git-lfs
     git-credential-manager
     htop
+    inetutils
+    mtr
+    nettools
     nodejs_22
     podman
     podman-compose
     rrsync
     ssh-to-age
-    unixtools.netstat
+    toybox
+    tree
     unzip
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
@@ -144,9 +149,9 @@
   };
 
 
-  services.tailscale.enable = true;
+  services.tailscale.enable = false;
   networking.nameservers = [ "100.100.100.100" "8.8.8.8" "1.1.1.1" ];
-  networking.search = [ "pufferfish-bellatrix.ts.net" ];
+  #networking.search = [ "pufferfish-bellatrix.ts.net" ];
 
   services.headscale = {
     enable  = false;
