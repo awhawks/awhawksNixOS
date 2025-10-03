@@ -20,5 +20,5 @@ then
     exit 1
 fi
 
-nix flake check --all-systems
+nix flake check --all-systems --show-trace
 nixos-rebuild switch --flake .#myzima1 --target-host myzima1a --use-remote-sudo

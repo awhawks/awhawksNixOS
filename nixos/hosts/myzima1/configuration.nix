@@ -4,7 +4,9 @@
 
 { config, inputs, outputs, lib, pkgs, ... }:
 {
-  imports = [ # Include the results of the hardware scan.
+  imports = [
+    # Include the results of the hardware scan.
+    #./disko-config.nix
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -61,48 +63,12 @@
     #media-session.enable = true;
   };
 
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "yes";
-      PasswordAuthentication = false;
-      X11Forwarding = true;
-    };
-
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
   users.users.backup = {
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
-      ''command="${pkgs.rrsync}/bin/rrsync /rsync/backups/",restrict ${( builtins.readFile ../../secrets/myzima1/awhawks-ed25519-public )}''
-    ];
-  };
-  users.users.awhawks = {
-    isNormalUser = true;
-    hashedPasswordFile = config.age.secrets.hashed-password-awhawks.path;
-    description = "Adam W. Hawk";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-        inputs.home-manager.packages.${pkgs.system}.default
-    ];
-    openssh.authorizedKeys.keys =
-    [
-      # change this to your ssh key
-      ( builtins.readFile ../../secrets/myzima1/awhawks-rsa-public )
-      ( builtins.readFile ../../secrets/myzima1/awhawks-ed25519-public )
-    ];
-  };
-
-  users.users.root = {
-    hashedPasswordFile = config.age.secrets.hashed-password-root.path;
-    openssh.authorizedKeys.keys =
-    [
-      # change this to your ssh key
-      ( builtins.readFile ../../secrets/myzima1/awhawks-rsa-public )
-      ( builtins.readFile ../../secrets/myzima1/awhawks-ed25519-public )
+      ''command="${pkgs.rrsync}/bin/rrsync /rsync/backups/",restrict ${( builtins.readFile ../../home/awhawks/awhawks-ed25519-public )}''
     ];
   };
 
@@ -124,6 +90,7 @@
     git
     git-lfs
     git-credential-manager
+    headscale
     htop
     inetutils
     mtr
@@ -148,26 +115,44 @@
       import ../../home/awhawks/${config.networking.hostName}.nix;
   };
 
+  # Enable the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "yes";
+      PasswordAuthentication = false;
+      X11Forwarding = true;
+    };
 
-  services.tailscale.enable = false;
-  networking.nameservers = [ "100.100.100.100" "8.8.8.8" "1.1.1.1" ];
-  #networking.search = [ "pufferfish-bellatrix.ts.net" ];
-
-  services.headscale = {
-    enable  = false;
-    package = pkgs.headscale;
-    address = "0.0.0.0";
-    port    = 8080;
-    user    = "headscale";
-    group   = "headscale";
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  services.fstrim = {
+    enable = true; # For SSD/thin-provisioned storage
+    interval = "weekly";
+  };
+
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+  # to actually do that.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.05"; # Did you read the comment?
 
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
+
 #set -x
 set -e
-set -u
 set -o errexit
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -14,17 +14,4 @@ then
     exit 1
 fi
 
-if [ $# -ne 1 ]
-then
-  echo "you must provide an age file"
-  exit 13
-fi
-
-if [ -z "${EDITOR+x}" ]
-then
-  export EDITOR="vi"
-fi
-
-#ageFile=${1//secrets\//}
-ageFile=$1
-nix run github:ryantm/agenix -- -e "${ageFile}"
+nix run github:serokell/deploy-rs -- .#myzima1
