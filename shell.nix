@@ -4,6 +4,7 @@ mkShell {
     age
     agenix-cli
     #bcompare
+    deploy-rs
     nixos-rebuild
     rage
     ragenix

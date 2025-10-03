@@ -3,7 +3,6 @@
 # sudo nixos-generate-config --dir ./hosts/myzima1
 # 
 # Please make sure to change the first couple of lines in your configuration.nix:
-
 # { config, inputs, ouputs, lib, pkgs, ... }:
 #
 # {
@@ -14,7 +13,6 @@
 #   ...
 #
 # Moreover please update the packages option in your user configuration and add the home-manager options:
-
 # users.users = {
 #   awhawks = {
 #     isNormalUser = true;
@@ -33,14 +31,16 @@
 #
 # Please also change your hostname accordingly:
 #:w
-
 # networking.hostName = "nixos"; # Define your hostname.
 {
   imports = [
     ../common
     ./configuration.nix
+    ./programs.nix
     ./secrets.nix
+    ./services
     ./arrstack.nix
   ];
+
 }
 

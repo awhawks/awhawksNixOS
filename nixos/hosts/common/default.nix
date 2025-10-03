@@ -1,6 +1,19 @@
 # Common configuration for all hosts
-
-{ lib, inputs, outputs, ... }: {
+{
+  pkgs,
+  lib,
+  inputs,
+  outputs,
+  ...
+}: {
+  imports = [
+    ./users
+    inputs.home-manager.nixosModules.home-manager
+  ];
+  home-manager = {
+    useUserPackages = true;
+    extraSpecialArgs = {inherit inputs outputs;};
+  };
   nixpkgs = {
     # You can add overlays here
     overlays = [
@@ -8,6 +21,9 @@
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.stable-packages
+      outputs.overlays.locked-packages
+      outputs.overlays.pinned-packages
+      outputs.overlays.master-packages
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -36,11 +52,14 @@
     };
     gc = {
       automatic = true;
+      dates = "weekly";
       options = "--delete-older-than 30d";
     };
     optimise.automatic = true;
-    registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+    registry =
+      (lib.mapAttrs (_: flake: {inherit flake;}))
       ((lib.filterAttrs (_: lib.isType "flake")) inputs);
-    nixPath = [ "/etc/nix/path" ];
+    nixPath = ["/etc/nix/path"];
   };
+  users.defaultUserShell = pkgs.bash;
 }
