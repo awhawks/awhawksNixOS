@@ -1,22 +1,22 @@
 { config, inputs, outputs, lib, pkgs, ... }:
 {
   nixarr = {
-    enable = true;
-    audiobookshelf.enable    = true;
-    autobrr.enable           = true;
-    bazarr.enable            = true;
+    enable = false;
+    audiobookshelf.enable    = false;
+    autobrr.enable           = false;
+    bazarr.enable            = false;
     ddns.njalla.enable       = false;
-    jellyfin.enable          = true;
-    jellyseerr.enable        = true;
-    lidarr.enable            = true;
-    plex.enable              = true;
-    prowlarr.enable          = true;
-    radarr.enable            = true;
-    readarr.enable           = true;
-    readarr-audiobook.enable = true;
+    jellyfin.enable          = false;
+    jellyseerr.enable        = false;
+    lidarr.enable            = false;
+    plex.enable              = false;
+    prowlarr.enable          = false;
+    radarr.enable            = false;
+    readarr.enable           = false;
+    readarr-audiobook.enable = false;
     recyclarr.enable         = false;
     sabnzbd.enable           = false;
-    sonarr.enable            = true;
+    sonarr.enable            = false;
     transmission.enable      = false;
     vpn.enable               = false;
 
