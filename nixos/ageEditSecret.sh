@@ -16,7 +16,7 @@ fi
 
 if [ $# -ne 1 ]
 then
-  echo "you must provide an age file"
+  echo "you must provide action [ rekey ] or an age file"
   exit 13
 fi
 
@@ -25,6 +25,10 @@ then
   export EDITOR="vi"
 fi
 
-#ageFile=${1//secrets\//}
 ageFile=$1
-nix run github:ryantm/agenix -- -e "${ageFile}"
+if [ "${ageFile}" == "rekey" ]
+then
+  nix run github:ryantm/agenix -- -r
+else
+  nix run github:ryantm/agenix -- -e "${ageFile}"
+fi

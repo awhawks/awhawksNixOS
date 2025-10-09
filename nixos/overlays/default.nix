@@ -12,6 +12,7 @@
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
+    n8n = import ./mods/n8n.nix {inherit prev;};
     # nodejs_24 = inputs.nixpkgs-stable.legacyPackages.${prev.system}.nodejs_24;
     # paperless-ngx = inputs.nixpkgs-45570c2.legacyPackages.${prev.system}.paperless-ngx;
     # anytype-heart = inputs.nixpkgs-9e58ed7.legacyPackages.${prev.system}.anytype-heart;

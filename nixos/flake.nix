@@ -41,22 +41,27 @@
     nix-pia-vpn.url = "github:rcambrj/nix-pia-vpn";
     nix-pia-vpn.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixarr.url = "github:rasmus-kirk/nixarr";
-    nixarr.inputs.nixpkgs.follows = "nixpkgs";
-
   };
 
   outputs = {
     self,
-    agenix,
     home-manager,
     nixpkgs,
-    nixpkgs-stable, 
+    nixpkgs-stable,
+    nixpkgs-45570c2,
+    nixpkgs-locked,
+    nixpkgs-9e58ed7,
+    nixpkgs-master,
+    agenix,
+    deploy-rs,
+    disko,
+    nixos-generators,
+    nix-colors,
+    nix-pia-vpn,
     ...
   } @ inputs: let
     inherit (self) outputs;
     systems = [
-      "aarch64-linux"
       "x86_64-linux"
     ];
     forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -79,34 +84,26 @@
     overlays = import ./overlays {inherit inputs outputs;};
 
     nixosConfigurations = {
-      myzima1 = nixpkgs.lib.nixosSystem {
+      myzima2 = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs;
-          hostname = "myzima1";
+          hostname = "myzima2";
         };
         modules = [
-          ./hosts/myzima1
-          inputs.agenix.nixosModules.default
-          inputs.disko.nixosModules.disko
-          inputs.nixarr.nixosModules.default
-          #TODO inputs.nix-pia-vpn.nixosModules.default {
-          #TODO   services.pia-vpn = {
-          #TODO     enable = true;
-          #TODO     certificateFile = inputs.agenix.nixosModules.default.age.secrets.pia-ca-cert.path;
-          #TODO     environmentFile = inputs.agenix.nixosModules.default.age.secrets.pia-user-pass.path; # use sops-nix or agenix
-          #TODO   };
-          #TODO }
+          ./hosts/myzima2
+          agenix.nixosModules.default
+          disko.nixosModules.disko
         ];
       };
     };
     homeConfigurations = {
-      "awhawks@myzima1" = home-manager.lib.homeManagerConfiguration {
+      "awhawks@myzima2" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = {
           inherit inputs outputs;
-          hostname = "myzima1";
+          hostname = "myzima2";
         };
-        modules = [ ./home/awhawks/myzima1.nix ];
+        modules = [ ./home/awhawks/myzima2.nix ];
       };
     };
     devShells.x86_64-linux.infraShell = let
@@ -126,8 +123,8 @@
       };
 
     deploy.nodes = {
-      myzima1 = {
-        hostname = "myzima1a";
+      myzima2 = {
+        hostname = "myzima2a";
         profiles = {
           system = {
             # This is the user that deploy-rs will use when connecting.
@@ -179,12 +176,14 @@
             # Timeout for profile activation confirmation.
             # This defaults to 30 seconds.
             confirmTimeout = 30;
-            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos
-                   self.nixosConfigurations.myzima1;
+            path = deploy-rs.lib.x86_64-linux.activate.nixos
+                   self.nixosConfigurations.myzima2;
           };
         };
       };
     };
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+    # This is highly advised, and will prevent many possible mistakes
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+
   };
 }

@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # Define your custom packages here
   #hyprpaper-random = pkgs.callPackage ./hyprpaper-random {};
   #launch-webapp = pkgs.callPackage ./launch-webapp/default.nix {};

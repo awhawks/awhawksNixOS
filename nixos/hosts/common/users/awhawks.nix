@@ -9,17 +9,18 @@
     isNormalUser = true;
     description = "Adam W. Hawks";
     extraGroups = [
-      "wheel"
-      "networkmanager"
-      "libvirtd"
-      "flatpak"
+      "adbusers"
       "audio"
-      "video"
-      "plugdev"
+      "flatpak"
       "input"
       "kvm"
+      "libvirtd"
+      "networkmanager"
+      "plugdev"
+      "podman"
       "qemu-libvirtd"
-      "adbusers"
+      "video"
+      "wheel"
     ];
     openssh.authorizedKeys.keys = [
       ( builtins.readFile ../../../home/awhawks/awhawks-rsa-public )

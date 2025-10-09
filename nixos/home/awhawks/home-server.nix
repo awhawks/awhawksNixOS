@@ -81,23 +81,114 @@
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "awhawks";
     userEmail = "awhawks@writeme.com";
-    aliases = {
-      logd  = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-      hist  = "log --graph --pretty=format:'%h %ad | %s%d [%an]' --date=short";
-      mylog = "log --graph --pretty=format:'%h %s [%an]'";
-      log1  = "log --graph --abbrev-commit --all --decorate=short --pretty=oneline --decorate-refs-exclude=refs/tags";
-      log2  = "log --graph --abbrev-commit --all --decorate=short --pretty=oneline";
-      log3  = "log --graph --abbrev-commit --all --decorate=short --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(bold blue)<%an>%Creset'";
-      log4  = "log --graph --abbrev-commit --all --decorate=short --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(bold blue)<%an>%Creset %C(green)(%ci)%Creset'";
-      log5  = "log --graph --abbrev-commit --all --decorate=auto  --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset'";
-      showColors = "log --pretty=format:'\t%C(dim red)dim red%Creset %C(red)red%Creset %C(bold red)bold red%Creset \t%C(dim green)dim green%Creset %C(green)green%Creset %C(bold green)bold green%Creset \t%C(dim yellow)dim yellow%Creset %C(yellow)yellow%Creset %C(bold yellow)bold yellow%Creset \t%C(dim blue)dim blue%Creset %C(blue)blue%Creset %C(bold blue)bold blue%Creset \t%C(dim magenta)dim magenta%Creset %C(magenta)magenta%Creset %C(bold magenta)bold magenta%Creset \t%C(dim cyan)dim cyan%Creset %C(cyan)cyan%Creset %C(bold cyan)bold cyan%Creset \t%C(dim white)dim white%Creset %C(white)white%Creset %C(bold white)bold white%Creset can also %C(ul red)ul red%Creset %C(blink green)blink green%Creset %C(reverse blue red)reverse blue red%Creset'";
-    };
-    lfs.enable = true;
     extraConfig = {
-      core.excludesfile = "~/.gitignore_global";
-      init.defaultBranch = "main";
+      core = {
+        editor   = "vi";
+        autocrlf = "input";
+        excludesfile = "~/.gitignore_global";
+      };
+      branch ={
+        autosetuprebase = "always";
+      };
+      color = {
+        status = true;
+      };
+      diff = {
+        tool = "bc";
+      };
+      difftool."bc" = {
+        path          = "bcompare";
+        trustExitCode = true;
+      };
+      merge = {
+        tool = "bc";
+      };
+      mergetool."bc" = {
+        path          = "bcompare";
+        trustExitCode = true;
+      };
+      difftool = {
+        prompt = true;
+      };
+      aliases = {
+        logd  = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        hist  = "log --graph --pretty=format:'%h %ad | %s%d [%an]' --date=short";
+        mylog = "log --graph --pretty=format:'%h %s [%an]'";
+        log1  = "log --graph --abbrev-commit --all --decorate=short --pretty=oneline --decorate-refs-exclude=refs/tags";
+        log2  = "log --graph --abbrev-commit --all --decorate=short --pretty=oneline";
+        log3  = "log --graph --abbrev-commit --all --decorate=short --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(bold blue)<%an>%Creset'";
+        log4  = "log --graph --abbrev-commit --all --decorate=short --pretty=format:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(bold blue)<%an>%Creset %C(green)(%ci)%Creset'";
+        log5  = "log --graph --abbrev-commit --all --decorate=auto  --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset'";
+        showColors = "log --pretty=format:'\t%C(dim red)dim red%Creset %C(red)red%Creset %C(bold red)bold red%Creset \t%C(dim green)dim green%Creset %C(green)green%Creset %C(bold green)bold green%Creset \t%C(dim yellow)dim yellow%Creset %C(yellow)yellow%Creset %C(bold yellow)bold yellow%Creset \t%C(dim blue)dim blue%Creset %C(blue)blue%Creset %C(bold blue)bold blue%Creset \t%C(dim magenta)dim magenta%Creset %C(magenta)magenta%Creset %C(bold magenta)bold magenta%Creset \t%C(dim cyan)dim cyan%Creset %C(cyan)cyan%Creset %C(bold cyan)bold cyan%Creset \t%C(dim white)dim white%Creset %C(white)white%Creset %C(bold white)bold white%Creset can also %C(ul red)ul red%Creset %C(blink green)blink green%Creset %C(reverse blue red)reverse blue red%Creset'";
+      };
+      safe = {
+        directory      = "/media/nfs/plex/media/TV_Shows";
+      };
+      filter."lfs" = {
+        smudge         = "git-lfs smudge -- %f";
+        process        = "git-lfs filter-process";
+        required       = true;
+        clean          = "git-lfs clean -- %f";
+        useJGitBuiltin = true;
+      };
+      init = {
+        defaultBranch = "main";
+      };
+    };
+  };
+
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      user = {
+        email = "awhawks@writeme.com";
+        name = "Adam W. Hawks";
+      };
+    };
+  };
+
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    matchBlocks = {
+      "p50" = {
+        hostname = "192.168.60.5";
+        user = "awhawks";
+        port = 22;
+        identityFile = "~/.ssh/id_rsa";
+      };
+      "myzima1a" = {
+        hostname = "192.168.60.6";
+        user = "awhawks";
+        port = 22;
+        identityFile = "~/.ssh/id_rsa";
+      };
+      "myzima1b" = {
+        hostname = "192.168.60.7";
+        user = "awhawks";
+        port = 22;
+        identityFile = "~/.ssh/id_rsa";
+      };
+      "myzima2a" = {
+        hostname = "192.168.60.8";
+        user = "awhawks";
+        port = 22;
+        identityFile = "~/.ssh/id_rsa";
+      };
+      "myzima2b" = {
+        hostname = "192.168.60.9";
+        user = "awhawks";
+        port = 22;
+        identityFile = "~/.ssh/id_rsa";
+      };
+      "mynas" = {
+        hostname = "192.168.60.12";
+        user = "awhawks";
+        identityFile = "~/.ssh/id_rsa";
+      };
     };
   };
 }

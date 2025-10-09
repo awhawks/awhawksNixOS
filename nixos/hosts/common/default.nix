@@ -7,9 +7,16 @@
   ...
 }: {
   imports = [
+    ./extraServices
     ./users
     inputs.home-manager.nixosModules.home-manager
   ];
+
+  environment.pathsToLink = [
+    "/share/xdg-desktop-portal"
+    "/share/applications"
+  ];
+
   home-manager = {
     useUserPackages = true;
     extraSpecialArgs = {inherit inputs outputs;};

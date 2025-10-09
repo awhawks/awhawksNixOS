@@ -1,0 +1,2 @@
+command="/nix/store/vhv3b7n8lfy67vgr9fwq6488v2apknqp-rrsync-3.4.1/bin/rrsync /rsync/backups/",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0E7DSiRlvqSjabsk79vISmj6Z1tEq4/MYIhFG1sngR
+

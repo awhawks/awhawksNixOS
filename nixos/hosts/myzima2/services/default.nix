@@ -1,0 +1,33 @@
+{
+  imports = [
+    ./arr_audiobookshelf.nix
+    ./arr_autobrr.nix
+    ./arr_bazarr.nix
+    ./arr_jellyfin.nix
+    ./arr_jellyseerr.nix
+    ./arr_lidarr.nix
+    ./arr_plex.nix
+    ./arr_prowlarr.nix
+    ./arr_radarr.nix
+    ./arr_readarr.nix
+    ./arr_recyclarr.nix
+    ./arr_sabnzbd.nix
+    ./arr_sonarr.nix
+    ./arr_tautulli.nix
+    ./arr_transmission.nix
+    ./containers
+    #./gitea.nix
+    ./headscale.nix
+    #./minio.nix
+    #./mysql.nix
+    ./n8n.nix
+    #./outline.nix
+    #./paperless.nix
+    #./postgres.nix
+    #./searx.nix
+    ./tailscale.nix
+    ./traefik.nix
+    ./vaultwarden.nix
+    #./wastebin.nix
+  ];
+}

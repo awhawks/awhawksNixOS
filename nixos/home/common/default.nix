@@ -1,4 +1,13 @@
-{ config, lib, outputs, pkgs, ... }: {
+{
+  inputs,
+  lib,
+  outputs,
+  pkgs,
+  ...
+}: {
+  imports = [
+    inputs.nix-colors.homeManagerModules.default
+  ]; #imports = builtins.attrValues outputs.homeManagerModules;
   nixpkgs = {
     # You can add overlays here
     overlays = [

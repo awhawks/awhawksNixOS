@@ -21,6 +21,7 @@
     htop
     jq
     nix-index
+    progress
     unzip
     wireguard-tools
     zip
