@@ -105,12 +105,22 @@
     headscale
     htop
     inetutils
+    jetbrains.clion
+    jetbrains.idea-community
+    jetbrains.goland
+    jetbrains.jdk
+    jetbrains.idea-ultimate
+    jetbrains.pycharm-community
+    jetbrains.pycharm-professional
+    kotlin
     mtr
     nettools
+    nixVersions.latest
     nodejs_22
     podman
     podman-compose
     rrsync
+    rsync
     ssh-to-age
     toybox
     tree
@@ -125,6 +135,21 @@
     extraSpecialArgs = { inherit inputs outputs; };
     users.awhawks =
       import ../../home/awhawks/${config.networking.hostName}.nix;
+  };
+
+  services.rsyncd = {
+    enable = true;
+    settings = {
+      globalSection = {
+        address = "0.0.0.0";
+      };
+      sections = {
+        data = {
+          comment = "media stuff";
+          path = "/data";
+        };
+      };
+    };
   };
 
   # Enable the OpenSSH daemon.
