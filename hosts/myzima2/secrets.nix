@@ -13,6 +13,9 @@
         group = "users";
         mode = "0600";
       };
+      gluetun-env = {
+        file = ../../secrets/gluetun-env.age;
+      };
       hashed-password-awhawks = {
         file = ../../secrets/hashed-password-awhawks.age;
       };
@@ -21,19 +24,6 @@
       };
       newshosting = {
         file = ../../secrets/newshosting.age;
-      };
-      pia-ca-cert = {
-        file = ../../secrets/pia-ca-cert.age;
-      };
-      pia-user-pass = {
-        file = ../../secrets/pia-user-pass.age;
-      };
-      pia-switzerland = {
-        file = ../../secrets/pia-switzerland.age;
-        owner = "root";
-        group = "root";
-        mode = "0440";
-        path = "/data/.secret/vpn/wg.conf";
       };
       n8n-env = {
         file = ../../secrets/n8n-env.age;

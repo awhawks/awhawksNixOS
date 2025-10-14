@@ -20,12 +20,10 @@ in {
   "secrets/vaultwarden-env.age".publicKeys         = systems ++ users;
   "secrets/awhawks-private-rsa.age".publicKeys     = systems ++ users;
   "secrets/awhawks-private-ed25519.age".publicKeys = systems ++ users;
+  "secrets/gluetun-env.age".publicKeys             = systems ++ users;
   "secrets/hashed-password-root.age".publicKeys    = systems ++ users;
   "secrets/hashed-password-awhawks.age".publicKeys = systems ++ users;
   "secrets/n8n-env.age".publicKeys                 = systems ++ users;
   "secrets/newshosting.age".publicKeys             = systems ++ users;
-  "secrets/pia-switzerland.age".publicKeys         = systems ++ users;
-  "secrets/pia-ca-cert.age".publicKeys             = systems ++ users;
-  "secrets/pia-user-pass.age".publicKeys           = systems ++ users;
   "secrets/valutwarden-env.age".publicKeys         = systems ++ users;
 }
