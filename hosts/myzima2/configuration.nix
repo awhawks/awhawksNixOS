@@ -92,13 +92,11 @@
     compose2nix
     disko
     dive
-    docker
-    docker-buildx
     docker-compose
     file
     firefox
     gh
-    git
+    gitFull
     git-agecrypt
     git-lfs
     git-credential-manager
@@ -119,6 +117,7 @@
     nodejs_22
     podman
     podman-compose
+    podman-tui
     rrsync
     rsync
     ssh-to-age
