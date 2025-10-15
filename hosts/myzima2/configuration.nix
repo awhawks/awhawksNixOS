@@ -31,11 +31,20 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "myzima2"; # Define your hostname.
-  networking.hostId = "31415926"; # CHANGE ME
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+    # Define your hostname.
+    hostName = "myzima2";
+    hostId = "31415926"; # CHANGE ME
+    networkmanager.enable = true;
+    interfaces.enp2s0.ipv4.addresses = [
+      {
+        address = "10.2.0.2";
+        prefixLength = 16;
+      }
+    ];
+  };
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -115,13 +124,13 @@
     nettools
     nixVersions.latest
     nodejs_22
+    pciutils
     podman
     podman-compose
     podman-tui
     rrsync
     rsync
     ssh-to-age
-    toybox
     tree
     unzip
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.

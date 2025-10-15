@@ -1,8 +1,3 @@
-# The Ultimate CASA OS Media Server All In One KL Tech Videos Compose file.
-# www.youtube.com/@kltechvideos/videos
-# This compsose is shown and used in my latest video EP3 The ultimate download station.
-# Located here... https://youtu.be/Ji1p_ZWVFDU
-
 name: myarrstack
 
 services:
@@ -13,28 +8,48 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
+    network_mode: bridge
     ports:
-      - 8888:8888/tcp # HTTP proxy #Gluetun
-      - 8388:8388/tcp # Shadowsocks #Gluetun
-      - 8388:8388/udp # Shadowsocks #Gluetun
-      - 8112:8112 # Deluge UI
-      - 6881:6881 # Deluge Incoming port TCP
-      - 6881:6881/udp # Deluge Incoming port UDP
-      - 58846:58846 # optional # Deluge Outgoing Port TCP
-      - 8090:8080 # SabNZB UI
-      - 9696:9696 # Prowlarr UI
-      - 8989:8989 # Sonarr UI
-      - 7878:7878 # Radarr UI
-      - 8686:8686 # Lidarr UI
-      - 8787:8787 # Readarr UI
-      - 8191:8191 # Flaresover UI
-      #- 5055:5055 # Jellyseer
-      #- 8096:8096 # Jellyfin UI HTTP
-      #- 8920:8920 # optional # Jellyfin UI HTTPS
-      #- 7359:7359/udp # optional # Jellyfin proprietary discovery protocol
-      #- 1900:1900/udp # optional # Jellyfin Simple Service Discovery Protocol
+      - 8888:8888/tcp    # HTTP proxy #Gluetun
+      - 8388:8388/tcp    # Shadowsocks #Gluetun
+      - 8388:8388/udp    # Shadowsocks #Gluetun
+
+      - 8070:8070        # qbittorrent
+      - 6881:6881        # qbittorrent
+      - 6881:6881/udp    # qbittorrent
+
+      - 6767:6767        # bazarr
+      - 8686:8686        # lidarr
+      - 9696:9696        # prowlarr
+      - 8787:8787        # readarr
+      - 7878:7878        # radarr
+      - 8090:8080        # sabnzbd
+      - 8989:8989        # sonarr
+
+      #- 5055:5055       # overseer/jellyseer
+
+      #- 8096:8096       # jellyfin
+      #- 8920:8920       # jellyfin optional  UI HTTPS
+      #- 7359:7359/udp   # jellyfin optional  proprietary discovery protocol
+      #- 1900:1900/udp   # jellyfin optional  Simple Service Discovery Protocol
+
+      #- 32400:32400/tcp # plex
+      #- 8324:8324/tcp   # plex
+      #- 32469:32469/tcp # plex
+      #- 1900:1900/udp   # plex
+      #- 32410:32410/udp # plex
+      #- 32412:32412/udp # plex
+      #- 32413:32413/udp # plex
+      #- 32414:32414/udp # plex
+
+      #- 8181:8181/tcp   # tautulli
+
+      # NOT INSTALLED
+      #- 6881:6881/udp # Deluge Incoming port UDP
+      #- 58846:58846 # optional # Deluge Outgoing Port TCP
+      #- 8191:8191 # Flaresover UI
     volumes:
-      - /data/docker/state/gluetun:/gluetun
+      - /data/config/gluetun:/gluetun
     environment:
       - VPN_SERVICE_PROVIDER=private internet access
       - VPN_PORT_FORWARDING=on
@@ -45,164 +60,120 @@ services:
       - PUID=1000
       - PGID=1000
 
+  #############################
+  #### qbittorrent
+  #############################
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - WEBUI_PORT=8070
+      - TORRENTING_PORT=6881
+    volumes:
+      - /data/config/qbittorrent:/config
+      - /data/media/downloads:/media/downloads #optional
+    network_mode: service:gluetun
+    #ports:
+    #  - 8070:8070
+    #  - 6881:6881
+    #  - 6881:6881/udp
+    restart: unless-stopped
+  #############################
+  #### plex
+  #############################
+  pms-docker:
+    container_name: plex
+    image: plexinc/pms-docker:plexpass
+    restart: unless-stopped
+    network_mode: bridge
+    #network_mode: service:gluetun
+    ports:
+      - 32400:32400/tcp
+      - 8324:8324/tcp
+      - 32469:32469/tcp
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    environment:
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+      - PLEX_CLAIM=claim-F2xTrxevgwWu1a4wHwTm
+      - TZ=America/New_York
+      - CHANGE_CONFIG_DIR_OWNERSHIP="true"
+      - ADVERTISE_IP="http://hawkstech.org:32400"
+    hostname: awhawksPlexServer
+    devices:
+      - /dev/dri:/dev/dri # Pass through the graphics device
+    volumes:
+      - /data/config/plex:/config
+      - /data/transcode:/transcode
+      - /data/media:/media
+  #############################
+  #### tautulli
+  #############################
+  tautulli-docker:
+    container_name: tautulli
+    image: tautulli/tautulli:latest
+    restart: unless-stopped
+    network_mode: bridge
+    #network_mode: service:gluetun
+    ports:
+      - 8181:8181/tcp
+    volumes:
+      - /data/config/plex/Library/Application Support/Plex Media Server/Logs:/plexLogs
+      - /data/config/tautulli:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+  #############################
+  #### jellyfin
+  #############################
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
-    devices:
-      - /dev/dri/:/dev/dri/
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York
-      - NVIDIA_VISIBLE_DEVICES=all
+      - JELLYFIN_PublishedServerUrl=http://192.168.60.8 #optional
     volumes:
-      - /data/docker/state/jellyfin/library:/config
-      - /data/media:/data/media
-    restart: unless-stopped
+      - /data/config/jellyfin:/config
+      - /data/media:/media
+    network_mode: bridge
     #network_mode: service:gluetun
     ports:
-      - 8096:8096 # Jellyfin UI HTTP
-      - 8920:8920 # optional # Jellyfin UI HTTPS
-      - 7359:7359/udp # optional # Jellyfin proprietary discovery protocol
-      - 1900:1900/udp # optional # Jellyfin Simple Service Discovery Protocol
-
-  deluge:
-    image: lscr.io/linuxserver/deluge:latest
-    container_name: deluge
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-      - DELUGE_LOGLEVEL=error
-    volumes:
-      - /data/docker/state/deluge:/config
-      - /data/downloads/complete:/data/downloads
-      - /data/downloads/incomplete:/data/incomplete-downloads
-      - /data/docker/state/gluetun:/pia:ro
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      #- 1900:1900/udp #optional
     restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 8112:8112 # Deluge UI
-    #   - 6881:6881 # Deluge Incoming port TCP
-    #   - 6881:6881/udp # Deluge Incoming port UDP
-    #   - 58846:58846 # optional # Deluge Outgoing Port TCP
-
-  sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      - /data/docker/state/sabnzb/config:/config
-      - /data/docker/state/backup/sabnzb:/backup
-      - /data/downloads/complete:/data/downloads
-      - /data/downloads/incomplete:/data/incomplete-downloads
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 8080:8080 # SabNZB UI
-
-  prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      - /data/docker/state/prowlarr/config:/config
-      - /data/docker/state/backup/prowlarr:/backup
-      - /data/downloads/complete:/data/downloads
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #  - 9696:9696 # Prowlarr UI
-
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      - /data/docker/state/sonarr/config:/config
-      - /data/docker/state/backup/sonarr:/backup
-      - /data/downloads/complete:/data/downloads
-      - /data/media/slpahle/tv:/data/media/slpahle/tv
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 8989:8989 # Sonarr UI
-
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      - /data/docker/state/radarr/config:/config
-      - /data/docker/state/backup/radarr:/backup
-      - /data/downloads/complete:/data/downloads
-      - /data/media/slpahle/movies:/data/media/slpahle/movies
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 7878:7878 # Radarr UI
-
-  lidarr:
-    image: lscr.io/linuxserver/lidarr:latest
-    container_name: lidarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      - /data/docker/state/lidarr/config:/config
-      - /data/docker/state/backup/lidarr:/backup
-      - /data/downloads/complete:/data/downloads
-      - /data/media/slpahle/music:/data/media/slpahle/music
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 8686:8686 # Lidarr UI
-
-  readarr:
-    image: lscr.io/linuxserver/readarr:develop
-    container_name: readarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      - /data/docker/state/readarr/config:/config
-      - /data/docker/state/backup/readarr:/backup
-      - /data/downloads/complete:/data/downloads
-      - /data/media/slpahle/books:/data/media/slpahle/books
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 8787:8787 # Readarr UI
-
-  flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    environment:
-      - LOG_LEVEL=${LOG_LEVEL:-info}
-      - LOG_HTML=${LOG_HTML:-false}
-      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - TZ=America/New_York
-      - PUID=1000
-      - PGID=1000
-    restart: unless-stopped
-    network_mode: service:gluetun
-    # ports:
-    #   - 8191:8191 # Flaresover UI
-
+#TODO  #############################
+#TODO  #### bazarr
+#TODO  #############################
+#TODO  bazarr:
+#TODO    image: lscr.io/linuxserver/bazarr:latest
+#TODO    container_name: bazarr
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/config/bazarr:/config
+#TODO      - /data/media:/media #optional
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    #ports:
+#TODO    #  - 6767:6767
+#TODO    restart: unless-stopped
+  #############################
+  #### jellyseer
+  #############################
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
@@ -210,21 +181,142 @@ services:
       - LOG_LEVEL=debug
       - TZ=America/New_York
     volumes:
-      - /data/docker/state/jellyseerr/config:/app/config
+      - /data/config/jellyseerr:/app/config
     restart: unless-stopped
-    network_mode: service:gluetun
+    network_mode: bridge
+    #network_mode: service:gluetun
     ports:
       - 5055:5055 # Jellyseer
-
-  #homarr:
-  #  image: ghcr.io/ajnart/homarr:latest
-  #  container_name: homarr
-  #  environment:
-  #    - BASE_URL=
-  #  volumes:
-  #    - /data/docker/state/Homarr/config:/app/data/configs
-  #    - /data/docker/state/Homarr/data:/data
-  #    - /data/docker/state/Homarr/icons:/app/public/icons
-  #  restart: unless-stopped
-  #  ports:
-  #    - 9222:7575
+#TODO  #############################
+#TODO  #### lidarr
+#TODO  #############################
+#TODO  lidarr:
+#TODO    image: lscr.io/linuxserver/lidarr:latest
+#TODO    container_name: lidarr
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/backup/lidarr:/backup
+#TODO      - /data/config/lidarr:/config
+#TODO      - /data/media:/media #optional
+#TODO      - /data/media/downloads:/media/downloads #optional
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    #ports:
+#TODO    #  - 8686:8686
+#TODO    restart: unless-stopped
+#TODO  #############################
+#TODO  #### overseer
+#TODO  #############################
+#TODO  #TODO overseerr:
+#TODO  #TODO   image: lscr.io/linuxserver/overseerr:latest
+#TODO  #TODO   container_name: overseerr
+#TODO  #TODO   environment:
+#TODO  #TODO     - PUID=1000
+#TODO  #TODO     - PGID=1000
+#TODO  #TODO     - TZ=America/New_York
+#TODO  #TODO   volumes:
+#TODO  #TODO     - /data/config/overseerr:/config
+#TODO  #TODO   network_mode: bridge
+#TODO  #TODO   #network_mode: service:gluetun
+#TODO  #TODO   ports:
+#TODO  #TODO     - 5055:5055
+#TODO  #TODO   restart: unless-stopped
+#TODO  #############################
+#TODO  #### prowlarr
+#TODO  #############################
+#TODO  prowlarr:
+#TODO    image: lscr.io/linuxserver/prowlarr:latest
+#TODO    container_name: prowlarr
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/backup/prowlarr:/backup
+#TODO      - /data/config/prowlarr:/config
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    #ports:
+#TODO    #  - 9696:9696
+#TODO    restart: unless-stopped
+#TODO  #############################
+#TODO  #### radarr
+#TODO  #############################
+#TODO  radarr:
+#TODO    image: lscr.io/linuxserver/radarr:latest
+#TODO    container_name: radarr
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/backup/radarr:/backup
+#TODO      - /data/config/radarr:/config
+#TODO      - /data/media:/media #optional
+#TODO      - /data/media/downloads:/media/downloads #optional
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    #ports:
+#TODO    #  - 7878:7878
+#TODO    restart: unless-stopped
+#TODO  #############################
+#TODO  #### radarr
+#TODO  #############################
+#TODO  readarr:
+#TODO    image: lscr.io/linuxserver/readarr:develop
+#TODO    container_name: readarr
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/backup/readarr:/backup
+#TODO      - /data/config/readarr:/config
+#TODO      - /data/media/downloads:/data/downloads
+#TODO      - /data/media:/data/media
+#TODO    restart: unless-stopped
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    # ports:
+#TODO    #   - 8787:8787 # Readarr UI
+#TODO  #############################
+#TODO  #### sabnzbd
+#TODO  #############################
+#TODO  sabnzbd:
+#TODO    image: lscr.io/linuxserver/sabnzbd:latest
+#TODO    container_name: sabnzbd
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/config/sabnzbd:/config
+#TODO      - /data/media/downloads/incomplete:/media/downloads/incomplete #optional
+#TODO      - /data/media/downloads:/media/downloads #optional
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    #ports:
+#TODO    #  - 8090:8080
+#TODO    restart: unless-stopped
+#TODO  #############################
+#TODO  #### sonarr
+#TODO  #############################
+#TODO  sonarr:
+#TODO    image: lscr.io/linuxserver/sonarr:latest
+#TODO    container_name: sonarr
+#TODO    environment:
+#TODO      - PUID=1000
+#TODO      - PGID=1000
+#TODO      - TZ=America/New_York
+#TODO    volumes:
+#TODO      - /data/config/sonarr:/config
+#TODO      - /data/media:/media #optional
+#TODO      - /data/media/downloads:/media/downloads #optional
+#TODO    #network_mode: bridge
+#TODO    network_mode: service:gluetun
+#TODO    #ports:
+#TODO    #  - 8989:8989
+#TODO    restart: unless-stopped

@@ -1,0 +1,237 @@
+#############################################################################
+# https://github.com/TechHutTV/homelab/tree/main/media#docker-compose-and-env
+#############################################################################
+
+networks:
+  servarrnetwork:
+    name: servarrnetwork
+    ipam:
+      config:
+        - subnet: 172.39.0.0/24
+  frontend:
+    external: true
+
+services:
+  # airvpn recommended (referral url: https://airvpn.org/?referred_by=673908)
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun # If running on an LXC see readme for more info.
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.2
+    ports:
+      - 8081:8081 # qbittorrent web interface
+      - 6881:6881 # qbittorrent torrent port
+      - 6789:6789 # nzbget
+      - 9696:9696 # prowlarr
+    volumes:
+      - ./gluetun:/gluetun
+    # Make a '.env' file in the same directory.
+    env_file:
+      - .env
+    healthcheck:
+      test: ping -c 1 www.google.com || exit 1
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8081 # must match "qbittorrent web interface" port number in gluetun's service above
+      - DOCKER_MODS=ghcr.io/techclusterhq/qbt-portchecker:main
+      - PORTCHECKER_GLUETUN_API_KEY=<snip>
+    volumes:
+      - ./qbittorrent:/config
+      - /mnt/media:/data
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    network_mode: service:gluetun
+    healthcheck:
+      test: ping -c 1 www.google.com || exit 1
+      interval: 60s
+      retries: 3
+      start_period: 20s
+      timeout: 10s
+
+  deunhealth:
+    image: qmcgaw/deunhealth
+    container_name: deunhealth
+    network_mode: "none"
+    environment:
+      - LOG_LEVEL=info
+      - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
+      - TZ=${TZ}
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./prowlarr:/config
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    network_mode: service:gluetun
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./sonarr:/config
+      - /mnt/media:/data
+    ports:
+      - 8989:8989
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.3
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./radarr:/config
+      - /mnt/media:/data
+    ports:
+      - 7878:7878
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.4
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./bazarr:/config
+      - /mnt/media/movies:/movies
+      - /mnt/media/tv:/tv
+      - /mnt/media/anime:/anime
+    ports:
+      - 6767:6767
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.6
+
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:latest
+    container_name: homarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=988
+      - TZ=${TZ}
+      - SECRET_ENCRYPTION_KEY=<snip>
+    volumes:
+      - ./homarr/appdata:/appdata
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 7575:7575
+
+  decluttarr:
+    image: ghcr.io/manimatter/decluttarr:dev
+    container_name: decluttarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./decluttarr/config.yaml:/app/config/config.yaml
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.8
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ./jellyseerr:/app/config
+      - ./jellyseerr/logo_full.svg:/app/public/logo_full.svg
+    ports:
+      - 5054:5055
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nginx2-slpahle-http.rule=Host(`requests.slpahle.com`)
+      - traefik.http.routers.nginx2-slpahle-http.entrypoints=web
+      - traefik.http.routers.nginx2-slpahle-https.tls=true
+      - traefik.http.routers.nginx2-slpahle-https.tls.certresolver=cloudflare
+      - traefik.http.routers.nginx2-slpahle-https.rule=Host(`requests.slpahle.com`)
+      - traefik.http.routers.nginx2-slpahle-https.entrypoints=websecure
+      - traefik.http.routers.nginx2-whoosajiggawha-http.rule=Host(`requests.whoosajiggawha.us`)
+      - traefik.http.routers.nginx2-whoosajiggawha-http.entrypoints=web
+      - traefik.http.routers.nginx2-whoosajiggawha-https.tls=true
+      - traefik.http.routers.nginx2-whoosajiggawha-https.tls.certresolver=cloudflare
+      - traefik.http.routers.nginx2-whoosajiggawha-https.rule=Host(`requests.whoosajiggawha.us`)
+      - traefik.http.routers.nginx2-whoosajiggawha-https.entrypoints=websecure
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.10
+      frontend:    
+
+  huntarr:
+    image: ghcr.io/plexguide/huntarr:latest
+    container_name: huntarr
+    restart: unless-stopped
+    ports:
+      - "9705:9705"
+    volumes:
+      - ./huntarr:/config
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.9
