@@ -31,17 +31,6 @@
       n8n-env = {
         file = ../../secrets/n8n-env.age;
       };
-      tailscale-key = {
-        file = ../../secrets/tailscale-key.age;
-      };
-      traefik = {
-        file = ../../secrets/traefik.age;
-        owner = "traefik";
-        group = "traefik";
-      };
-      vaultwarden-env = {
-        file = ../../secrets/vaultwarden-env.age;
-      };
     };
   };
 }

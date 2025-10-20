@@ -1,4 +1,8 @@
 {config, ...}: {
+  age.secrets.vaultwarden-env = {
+    file = ../../../secrets/vaultwarden-env.age;
+  };
+
   services.vaultwarden = {
     enable = false;
     backupDir = "/var/backup/vaultwarden";

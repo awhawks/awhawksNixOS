@@ -4,6 +4,9 @@
   pkgs,
   ...
 }: {
+  age.secrets.tailscale-key = {
+    file = ../../../secrets/tailscale-key.age;
+  };
   services.tailscale = {
     enable = false;
     authKeyFile = config.age.secrets.tailscale-key.path;

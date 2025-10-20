@@ -15,15 +15,14 @@ let
     myzima2HostKeyPub
   ];
 in {
-  "secrets/tailscale-key.age".publicKeys           = systems ++ users;
-  "secrets/traefik.age".publicKeys                 = systems ++ users;
-  "secrets/vaultwarden-env.age".publicKeys         = systems ++ users;
-  "secrets/awhawks-private-rsa.age".publicKeys     = systems ++ users;
   "secrets/awhawks-private-ed25519.age".publicKeys = systems ++ users;
+  "secrets/awhawks-private-rsa.age".publicKeys     = systems ++ users;
+  "secrets/cloudflare_api_key.age".publicKeys      = systems ++ users;
   "secrets/gluetun-env.age".publicKeys             = systems ++ users;
-  "secrets/hashed-password-root.age".publicKeys    = systems ++ users;
   "secrets/hashed-password-awhawks.age".publicKeys = systems ++ users;
+  "secrets/hashed-password-root.age".publicKeys    = systems ++ users;
   "secrets/n8n-env.age".publicKeys                 = systems ++ users;
   "secrets/newshosting.age".publicKeys             = systems ++ users;
-  "secrets/valutwarden-env.age".publicKeys         = systems ++ users;
+  "secrets/tailscale-key.age".publicKeys           = systems ++ users;
+  "secrets/vaultwarden-env.age".publicKeys         = systems ++ users;
 }
