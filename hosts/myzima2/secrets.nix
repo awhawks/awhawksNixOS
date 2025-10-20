@@ -13,12 +13,6 @@
         group = "users";
         mode = "0600";
       };
-      gluetun-env = {
-        file = ../../secrets/gluetun-env.age;
-        owner = "awhawks";
-        group = "users";
-        mode = "0600";
-      };
       hashed-password-awhawks = {
         file = ../../secrets/hashed-password-awhawks.age;
       };

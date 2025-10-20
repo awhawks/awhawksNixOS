@@ -4,9 +4,16 @@
   inputs,
   ...
 }: {
+  users.groups.awhawks = {
+    name = "awhawks";
+    gid = 1000; # Specify the desired GID
+    members = [ "awhawks" ]; # Add users to this group
+  };
+
   users.users.awhawks = {
     hashedPasswordFile = config.age.secrets.hashed-password-awhawks.path;
     isNormalUser = true;
+    uid = 1000; # Specify the desired UID
     description = "Adam W. Hawks";
     extraGroups = [
       "adbusers"

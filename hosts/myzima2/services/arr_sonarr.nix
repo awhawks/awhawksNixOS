@@ -6,17 +6,17 @@
 }: {
     services.sonarr = {
         # The directory where Sonarr stores its data files.
-        dataDir = "/var/lib/sonarr/.config/NzbDrone";
+        dataDir = "/data/config/sonarr2";
         # Whether to enable sonarr, a UsetNet/BitTorrent movie downloader.
-        enable = false;
+        enable = true;
         # Environment file to pass secret configuration values.
         # Each line must follow the SONARR__SECTION__KEY=value pattern.
         # Please consult the documentation at the wiki.
         environmentFiles = [];
         # Group under which Sonaar runs.
-        group = "sonarr";
+        group = "awhawks";
         # Open ports in the firewall for the Sonarr web interface
-        openFirewall = false;
+        openFirewall = true;
         # The sonarr package to use.
         package = pkgs.sonarr;
         # Attribute set of arbitrary config options.
@@ -36,6 +36,6 @@
             };
         };
         # User account under which sonarr runs.
-        user = "sonarr";
+        user = "awhawks";
     };
 }

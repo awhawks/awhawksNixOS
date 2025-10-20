@@ -6,11 +6,11 @@
 }: {
     services.jellyseerr = {
         # Config data directory
-        configDir = "/var/lib/jellyseerr/config";
+        configDir = "/data/config/jellyseerr2";
         # Whether to enable Jellyseerr, a requests manager for Jellyfin.
         enable = false;
         # Open port in the firewall for the Jellyseerr web interface.
-        openFirewall = false;
+        openFirewall = true;
         # The jellyseerr package to use.
         package = pkgs.jellyseerr;
         # The port which the Jellyseerr web UI should listen to.

@@ -16,7 +16,7 @@ fi
 
 if [ $# -ne 2 ]
 then
-    echo "you must provide deployType [ anywhere | deploy ] and host [ myzima1 | myzima2 ]"
+    echo "you must provide deployType [ anywhere | deploy | boot | switch | check | rebuild ] and host [ myzima1 | myzima2 ]"
     exit 1
 fi
 
