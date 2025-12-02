@@ -86,7 +86,7 @@
     userEmail = "awhawks@writeme.com";
     extraConfig = {
       core = {
-        editor   = "vi";
+        editor = "vi";
         autocrlf = "input";
         excludesfile = "~/.gitignore_global";
       };
@@ -102,6 +102,9 @@
       difftool."bc" = {
         path          = "bcompare";
         trustExitCode = true;
+      };
+      init = {
+        defaultBranch = "main";
       };
       merge = {
         tool = "bc";
@@ -134,9 +137,6 @@
         clean          = "git-lfs clean -- %f";
         useJGitBuiltin = true;
       };
-      init = {
-        defaultBranch = "main";
-      };
     };
   };
 
@@ -154,40 +154,16 @@
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
-      "p50" = {
-        hostname = "192.168.60.5";
+      "*" = {
         user = "awhawks";
-        port = 22;
-        identityFile = "~/.ssh/id_rsa";
-      };
-      "myzima1a" = {
-        hostname = "192.168.60.6";
-        user = "awhawks";
-        port = 22;
-        identityFile = "~/.ssh/id_rsa";
-      };
-      "myzima1b" = {
-        hostname = "192.168.60.7";
-        user = "awhawks";
-        port = 22;
-        identityFile = "~/.ssh/id_rsa";
-      };
-      "myzima2a" = {
-        hostname = "192.168.60.8";
-        user = "awhawks";
-        port = 22;
-        identityFile = "~/.ssh/id_rsa";
-      };
-      "myzima2b" = {
-        hostname = "192.168.60.9";
-        user = "awhawks";
-        port = 22;
-        identityFile = "~/.ssh/id_rsa";
-      };
-      "mynas" = {
-        hostname = "192.168.60.12";
-        user = "awhawks";
-        identityFile = "~/.ssh/id_rsa";
+        identityFile = [
+          "~/.ssh/id_ed25519"
+        ];
+        addressFamily = "inet";
+        compression = true;
+        forwardAgent = true;
+        forwardX11 = true;
+        forwardX11Trusted = true;
       };
     };
   };

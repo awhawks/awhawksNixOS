@@ -236,7 +236,7 @@
   virtualisation.oci-containers.containers."jellyfin" = {
     image = "lscr.io/linuxserver/jellyfin:latest";
     environment = {
-      "JELLYFIN_PublishedServerUrl" = "http://192.168.60.8";
+      "JELLYFIN_PublishedServerUrl" = "http://myzima2a";
       "PGID" = "1000";
       "PUID" = "1000";
       "TZ" = "America/New_York";
