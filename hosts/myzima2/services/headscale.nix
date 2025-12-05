@@ -98,22 +98,5 @@
       '';
     };
 
-    # Traefik configuration for headscale
-    services.traefik.dynamicConfigOptions.http = {
-      services.headscale.loadBalancer.servers = [
-        {
-          url = "http://localhost:3009/";
-        }
-      ];
-
-      routers.headscale = {
-        rule = "Host(`hs.hawkstech.org`)";
-        tls = {
-          certResolver = "cloudflare";
-        };
-        service = "headscale";
-        entrypoints = "websecure";
-      };
-    };
   };
 }
