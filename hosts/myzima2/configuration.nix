@@ -109,17 +109,8 @@
     git-agecrypt
     git-lfs
     git-credential-manager
-    headscale
     htop
     inetutils
-    jetbrains.clion
-    jetbrains.idea-community
-    jetbrains.goland
-    jetbrains.jdk
-    jetbrains.idea-ultimate
-    jetbrains.pycharm-community
-    jetbrains.pycharm-professional
-    kotlin
     mtr
     nettools
     nixVersions.latest

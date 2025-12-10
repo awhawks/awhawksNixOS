@@ -11,8 +11,13 @@
     enable = false;
     authKeyFile = config.age.secrets.tailscale-key.path;
     useRoutingFeatures = "both";
+    #extraUpFlags = [
+    #  "--login-server=${config.services.headscale.settings.server_url}"
+    #  "--advertise-exit-node"
+    #  "--accept-routes"
+    #];
     extraUpFlags = [
-      "--login-server=${config.services.headscale.settings.server_url}"
+      "--login-server=http://127.0.0.1:8080"
       "--advertise-exit-node"
       "--accept-routes"
     ];
@@ -22,7 +27,7 @@
     rules."50-tailscale" = {
       onState = ["routable"];
       script = ''
-        NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")
+        NETDEV=$(ip -o route get 1.1.1.1 | cut -f 5 -d " ")
         ${pkgs.ethtool}/bin/ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
       '';
     };

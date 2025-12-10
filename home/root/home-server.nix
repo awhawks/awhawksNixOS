@@ -89,9 +89,11 @@
     lfs.enable = true;
     prompt.enable = true;
     difftastic.enable = true;
-    userName = "awhawks";
-    userEmail = "awhawks@writeme.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "awhawks";
+        email = "awhawks@writeme.com";
+      };
       branch ={
         autosetuprebase = "always";
       };

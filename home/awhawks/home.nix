@@ -82,9 +82,11 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "awhawks";
-    userEmail = "awhawks@writeme.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "awhawks";
+        email = "awhawks@writeme.com";
+      };
       core = {
         editor = "vi";
         autocrlf = "input";
