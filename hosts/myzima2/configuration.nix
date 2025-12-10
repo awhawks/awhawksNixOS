@@ -40,8 +40,8 @@
     networkmanager.enable = true;
     interfaces.enp2s0.ipv4.addresses = [
       {
-        address = "10.2.0.2";
-        prefixLength = 16;
+        address = "192.168.2.2";
+        prefixLength = 24;
       }
     ];
   };
