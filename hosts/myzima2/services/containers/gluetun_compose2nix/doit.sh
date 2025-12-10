@@ -8,6 +8,18 @@ scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 cd ${scriptDir} || exit 13
 
+if [ $# -ne 1 ]
+then
+  echo "usage: $0 <docker-compose.yml filename not path>"
+  exit 13
+fi
+
+if [ ! -f "${scriptDir}/${1}" ]
+then
+  echo "compose file does not exist at [${scriptDir}/${1}]"
+  exit 13
+fi
+
 args=""
 #args="${args} -auto_format"                         # if true, Nix output will be formatted using "nixfmt" (must be present in $PATH).
 args="${args} -auto_start"                          # auto-start setting for generated service(s). this applies to all services, not just containers. (default true)
@@ -22,7 +34,7 @@ args="${args} -env_files /run/agenix/gluetun-env"   # one or more comma-separate
 #args="${args} -generate_unused_resources"           # if set, unused resources (e.g., networks) will be generated even if no containers use them.
 args="${args} -ignore_missing_env_files"            # if set, missing env files will be ignored.
 args="${args} -include_env_files"                   # include env files in the NixOS container definition.
-args="${args} -inputs docker-compose.yml"           # one or more comma-separated path(s) to Compose file(s). (default "docker-compose.yml")
+args="${args} -inputs $1"                           # one or more comma-separated path(s) to Compose file(s). (default "docker-compose.yml")
 #args="${args} -option_prefix string"                # Prefix for the option. If empty, the project name will be used as the option name. (e.g. custom.containers)
 args="${args} -output myarrstack.nix"               # path to output Nix file. (default "docker-compose.nix")
 #args="${args} -project string"                      # project name used as a prefix for generated resources. this overrides any top-level "name" set in the Compose file(s).
