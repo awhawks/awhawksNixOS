@@ -16,7 +16,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-45570c2.url = "github:nixos/nixpkgs/45570c299dc2b63c8c574c4cd77f0b92f7e2766e";
     nixpkgs-locked.url = "github:nixos/nixpkgs/2744d988fa116fc6d46cdfa3d1c936d0abd7d121";
     nixpkgs-9e58ed7.url = "github:nixos/nixpkgs/9e58ed7ba759d81c98f033b7f5eba21ca68f53b0";
