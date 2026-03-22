@@ -1,0 +1,25 @@
+name: mymongodb
+
+x-podman:
+  in_pod: false
+  name_separator_compat: false
+  default_net_name_compat: false
+  default_net_behavior_compat: false
+
+services:
+  mongodb:
+    container_name: mongodb
+    hostname: mongodb
+    image: mongodb/mongodb-atlas-local:latest
+    restart: unless-stopped
+    privileged: true
+    ports:
+      # dbport
+      - "27017:27017"
+    userns_mode: keep-id:uid=1000
+    volumes:
+      - /home/awhawks/mnt/mongodb/data:/data/db
+      - /home/awhawks/mnt/mongodb/config:/data/configdb
+    environment:
+      MONGODB_INITDB_ROOT_USERNAME: "dbUser"
+      MONGODB_INITDB_ROOT_PASSWORD: "dbPassw0rd"

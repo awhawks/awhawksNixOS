@@ -5,6 +5,7 @@ let
   # SYSTEMS
   myzima1HostKeyPub="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINpUgWymWYD86WkUHRlkOLZK5at4LnaQs6GOPRJnsOnl";
   myzima2HostKeyPub="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHrtdIjpEoiXOgjwPgGzhnK7m0oZwmoqb8cIioD+qjBv";
+  myzima3HostKeyPub="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFy6fxi5fzp5BVGP3PIhvdNzNuUrTh8B1Ki9ZhXzFjtt";
 
   users = [
     awhawksKeyPub
@@ -13,6 +14,7 @@ let
   systems = [
     myzima1HostKeyPub
     myzima2HostKeyPub
+    myzima3HostKeyPub
   ];
 in {
   "secrets/awhawks-private-ed25519.age".publicKeys = systems ++ users;
@@ -21,6 +23,7 @@ in {
   "secrets/gluetun-env.age".publicKeys             = systems ++ users;
   "secrets/hashed-password-awhawks.age".publicKeys = systems ++ users;
   "secrets/hashed-password-root.age".publicKeys    = systems ++ users;
+  "secrets/mongodb.age".publicKeys                 = systems ++ users;
   "secrets/n8n-env.age".publicKeys                 = systems ++ users;
   "secrets/newshosting.age".publicKeys             = systems ++ users;
   "secrets/tailscale-key.age".publicKeys           = systems ++ users;

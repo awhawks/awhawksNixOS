@@ -17,20 +17,11 @@ in {
           package = pkgs.qemu_kvm;
           runAsRoot = true;
           swtpm.enable = true;
-          ovmf = {
-            enable = true;
-            packages = [
-              (pkgs.locked.OVMF.override {
-                secureBoot = true;
-                tpmSupport = true;
-              })
-              .fd
-            ];
-          };
         };
       };
     };
     programs.virt-manager.enable = true;
+    systemd.services.virt-secret-init-encryption.enable = false;
     environment = {
       systemPackages = [pkgs.qemu];
     };

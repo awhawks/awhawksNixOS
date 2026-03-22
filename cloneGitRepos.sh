@@ -2,374 +2,376 @@
 #!/run/current-system/sw/bin/env bash
 
 scriptDir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-rootDir=$(   cd -- "${scriptDir}/../.." &> /dev/null && pwd )
+rootDir=$(   cd -- "${scriptDir}/zzz" &> /dev/null && pwd )
 
 function cloneit() {
 	local repoPath=$1
 	local repoDir=${rootDir}/${repoPath}
-	echo "#########################################"
-	echo "#########################################"
-	echo "#########################################"
-	echo "#### "
-	echo "#### repoDir [${repoDir}]"
-	echo "#### "
-	echo "#########################################"
-	echo "#########################################"
-	echo "#########################################"
 	mkdir  -p ${rootDir}
 	if [   -d ${repoDir}/.git ]
 	then
 	 cd       ${repoDir} || exit 13
+	 echo "#### updating repoDir [${repoDir}]"
 	 git fetch --all --prune
 	 git pull
 	else
+	 echo "#########################################"
+	 echo "#########################################"
+	 echo "#########################################"
+	 echo "#### "
+	 echo "#### cloneing repoDir [${repoDir}]"
+	 echo "#### "
+	 echo "#########################################"
+	 echo "#########################################"
+	 echo "#########################################"
 	 mkdir -p ${repoDir}
 	 cd       ${repoDir} || exit 13
-	 git clone http://github.com/${repoPath} .
+	 git clone ssh://git@mynas0:222/${repoPath}.git .
+	 #git clone https://github.com/${repoPath} .
 	fi
 }
 
-#cloneit awhawks/awhawksNixOS
-cloneit cachix/devenv
-cloneit EmergentMind/nix-assets
-cloneit EmergentMind/nix-config
-cloneit EmergentMind/nix-config-starter
-cloneit EmergentMind/nix-secrets-reference
+#cloneit awhawks/awhawksNixOS                           https://github.com
+cloneit cachix/devenv                                  https://github.com
+cloneit EmergentMind/nix-assets                        https://github.com
+cloneit EmergentMind/nix-config                        https://github.com
+cloneit EmergentMind/nix-config-starter                https://github.com
+cloneit EmergentMind/nix-secrets-reference             https://github.com
 
-cloneit jnsgruk/nixos-config
-cloneit librephoenix/nixos-config
-cloneit mdlayher/homelab
-cloneit Mic92/dotfiles
-cloneit Mic92/flake-fmt
-cloneit Mic92/flake-linter
-cloneit Mic92/nix-configs
-cloneit Mic92/nix-update
-cloneit Mic92/ssh-to-age
-cloneit Mic92/ssh-to-pgp
-cloneit Mic92/sops-nix
-cloneit Misterio77/flake-config
-cloneit Misterio77/jenkins-nixos-tf
-cloneit Misterio77/nix-config
-cloneit Misterio77/nix-gaming
-cloneit Misterio77/nix-minecraft
-cloneit Misterio77/nix-starter-configs
-cloneit nix-community/acpi_call
-cloneit nix-community/all-cabal-json
-cloneit nix-community/authentik-nix
-cloneit nix-community/autofirma-nix
-cloneit nix-community/awesome-nix
-cloneit nix-community/browser-previews
-cloneit nix-community/buildbot-nix
-cloneit nix-community/buildcatrust
-cloneit nix-community/builtwithnix.org
-cloneit nix-community/bundix
-cloneit nix-community/cache-nix-action
-cloneit nix-community/carnix
-cloneit nix-community/comma
-cloneit nix-community/composer-local-repo-plugin
-cloneit nix-community/crate2nix
-cloneit nix-community/cross-toolchains.nix
-cloneit nix-community/crystal2nix
-cloneit nix-community/cuda-legacy
-cloneit nix-community/darwin-build-box
-cloneit nix-community/dconf2nix
-cloneit nix-community/disko
-cloneit nix-community/disko-templates
-cloneit nix-community/dns.nix
-cloneit nix-community/docker-nix
-cloneit nix-community/docker-nixpkgs
-cloneit nix-community/docnix
-cloneit nix-community/dream2nix
-cloneit nix-community/dream2nix-auto-test
-cloneit nix-community/dream2nix-nodejs-auto
-cloneit nix-community/dream2nix-pypi-most-popular
-cloneit nix-community/dreampkgs
-cloneit nix-community/eask2nix
-cloneit nix-community/emacs2nix
-cloneit nix-community/emacs-overlay
-cloneit nix-community/ethereum.nix
-cloneit nix-community/fenix
-cloneit nix-community/fetchTree-spec
-cloneit nix-community/flake-compat
-cloneit nix-community/flake-firefox-nightly
-cloneit nix-community/flake-gemini
-cloneit nix-community/flakelight
-cloneit nix-community/flake-nimble
-cloneit nix-community/flake.nix
-cloneit nix-community/.github
-cloneit nix-community/gnome-session-ctl
-cloneit nix-community/goblin-signing
-cloneit nix-community/gomod2nix
-cloneit nix-community/go-nix
-cloneit nix-community/google-summer-of-code
-cloneit nix-community/govendor
-cloneit nix-community/hardware-mnt-reform
-cloneit nix-community/harmonia
-cloneit nix-community/haumea
-cloneit nix-community/home-manager
-cloneit nix-community/hpe-ltfs
-cloneit nix-community/hydra-check
-cloneit nix-community/image-spec
-cloneit nix-community/impermanence
-cloneit nix-community/infra
-cloneit nix-community/kde2nix
-cloneit nix-community/kickstart-nix.nvim
-cloneit nix-community/label-approved
-cloneit nix-community/lanzaboote
-cloneit nix-community/ld-getby
-cloneit nix-community/lib-aggregate
-cloneit nix-community/linuxkit-nix
-cloneit nix-community/linyaps-flake
-cloneit nix-community/lorri
-cloneit nix-community/luarocks-nix
-cloneit nix-community/manix
-cloneit nix-community/mavenix
-cloneit nix-community/mediawiki-matrix-bot
-cloneit nix-community/meetup-london
-cloneit nix-community/mineflake
-cloneit nix-community/naersk
-cloneit nix-community/namaka
-cloneit nix-community/napalm
-cloneit nix-community/neovim-nightly-overlay
-cloneit nix-community/nh
-cloneit nix-community/nix
-cloneit nix-community/nix4nvchad
-cloneit nix-community/nix4vscode
-cloneit nix-community/nixago
-cloneit nix-community/nixago-extensions
-cloneit nix-community/nixbox
-cloneit nix-community/nix-bundle
-cloneit nix-community/nixd
-cloneit nix-community/nix-data-science
-cloneit nix-community/nix-direnv
-cloneit nix-community/nixdoc
-cloneit nix-community/nix-doom-emacs
-cloneit nix-community/nix-emacs
-cloneit nix-community/nix-environments
-cloneit nix-community/nix-eval-jobs
-cloneit nix-community/nix-github-actions
-cloneit nix-community/nixGL
-cloneit nix-community/nixhelm
-cloneit nix-community/nix-index
-cloneit nix-community/nix-index-database
-cloneit nix-community/nix-init
-cloneit nix-community/nix-installers
-cloneit nix-community/nix-ld
-cloneit nix-community/nix-ld-rs
-cloneit nix-community/nix-melt
-cloneit nix-community/NixNG
-cloneit nix-community/nix-on-droid
-cloneit nix-community/nix-on-droid-app
-cloneit nix-community/nixops-datadog
-cloneit nix-community/nixops-digitalocean
-cloneit nix-community/nixops-encrypted-links
-cloneit nix-community/nixops-gce
-cloneit nix-community/nixops_hcloud
-cloneit nix-community/nixops-libvirtd
-cloneit nix-community/nixops-vbox
-cloneit nix-community/nixos-anywhere
-cloneit nix-community/nixos-anywhere-examples
-cloneit nix-community/nixos-apple-silicon
-cloneit nix-community/nixos-avf
-cloneit nix-community/nixos-avf-image-app
-cloneit nix-community/nixos-cli
-cloneit nix-community/nixos-cli-archive
-cloneit nix-community/nixos-facter
-cloneit nix-community/nixos-facter-modules
-cloneit nix-community/nixos-gen-config
-cloneit nix-community/nixos-generators
-cloneit nix-community/nixos-images
-cloneit nix-community/nixos-install-scripts
-cloneit nix-community/nixos-landscape
-cloneit nix-community/nixos-modules-contrib
-cloneit nix-community/nixos-vscode-server
-cloneit nix-community/NixOS-WSL
-cloneit nix-community/nixpkgs
-cloneit nix-community/nixpkgs-fmt
-cloneit nix-community/nixpkgs.lib
-cloneit nix-community/nixpkgs-lint
-cloneit nix-community/nixpkgs-pytools
-cloneit nix-community/nixpkgs-swh
-cloneit nix-community/nixpkgs-terraform-providers-bin
-cloneit nix-community/nixpkgs-update
-cloneit nix-community/nixpkgs-update-github-releases
-cloneit nix-community/nixpkgs-wayland
-cloneit nix-community/nixpkgs-xr
-cloneit nix-community/nix-review-tools
-cloneit nix-community/nix-snapd
-cloneit nix-community/nix-snippets
-cloneit nix-community/nix-straight.el
-cloneit nix-community/nixt
-cloneit nix-community/nix-travis-ci
-cloneit nix-community/nix-ts-mode
-cloneit nix-community/nix-unit
-cloneit nix-community/nix-unstable-installer
-cloneit nix-community/nix-user-chroot
-cloneit nix-community/nixvim
-cloneit nix-community/nix-vscode-extensions
-cloneit nix-community/nix-zsh-completions
-cloneit nix-community/noogle
-cloneit nix-community/npmlock2nix
-cloneit nix-community/nsncd
-cloneit nix-community/NUR
-cloneit nix-community/nur-combined
-cloneit nix-community/nurl
-cloneit nix-community/nur-packages-template
-cloneit nix-community/nur-search
-cloneit nix-community/nur-update
-cloneit nix-community/patsh
-cloneit nix-community/pip2nix
-cloneit nix-community/pipewire-to-json
-cloneit nix-community/plasma-manager
-cloneit nix-community/pnpm2nix
-cloneit nix-community/poetry2nix
-cloneit nix-community/preservation
-cloneit nix-community/projects
-cloneit nix-community/pruned-racket-catalog
-cloneit nix-community/pynixutil
-cloneit nix-community/pypi2nix
-cloneit nix-community/pypi2nix-overrides
-cloneit nix-community/queued-build-hook
-cloneit nix-community/raspberry-pi-nix
-cloneit nix-community/redoxpkgs
-cloneit nix-community/review-bot
-cloneit nix-community/rfc39-record
-cloneit nix-community/rfc55
-cloneit nix-community/rkwifibt
-cloneit nix-community/rnix-hashes
-cloneit nix-community/rnix-lsp
-cloneit nix-community/rnix-parser
-cloneit nix-community/robotnix
-cloneit nix-community/rustowl-flake
-cloneit nix-community/setup.nix
-cloneit nix-community/srvos
-cloneit nix-community/steam-fetcher
-cloneit nix-community/stylix
-cloneit nix-community/talon-nix
-cloneit nix-community/templates
-cloneit nix-community/terraform-nixos
-cloneit nix-community/todomvc-nix
-cloneit nix-community/travis-build
-cloneit nix-community/tree-sitter-nix
-cloneit nix-community/trustix
-cloneit nix-community/vagrant-nixos-plugin
-cloneit nix-community/vgo2nix
-cloneit nix-community/vscode-nix-ide
-cloneit nix-community/vs-overlay
-cloneit nix-community/vulnix
-cloneit nix-community/wiki
-cloneit nix-community/yarn2nix
-cloneit nix-community/zephyr-nix
-cloneit nix-community/zon2nix
-cloneit nix-community/ZurichZHF
-cloneit NixOS/20th-nix
-cloneit NixOS/aarch64-build-box
-cloneit NixOS/amis
-cloneit NixOS/branding
-cloneit NixOS/bundlers
-cloneit NixOS/cabal2nix
-cloneit NixOS/calamares-nixos-extensions
-cloneit NixOS/darwin-stubs
-cloneit NixOS/distribution-nixpkgs
-cloneit NixOS/docker
-cloneit NixOS/equinix-metal-builders
-cloneit NixOS/experimental-nix-installer
-cloneit NixOS/first-time-contribution-tagger
-cloneit NixOS/flake-registry
-cloneit NixOS/flake-regressions
-cloneit NixOS/flake-regressions-data
-cloneit NixOS/foundation
-cloneit NixOS/.github
-cloneit NixOS/GSoC
-cloneit NixOS/hackage-db
-cloneit NixOS/hydra
-cloneit NixOS/hydra-ant-logger
-cloneit NixOS/hydra-provisioner
-cloneit NixOS/hydra-scale-equinix-metal
-cloneit NixOS/images
-cloneit NixOS/infra
-cloneit NixOS/jailbreak-cabal
-cloneit NixOS/language-nix
-cloneit NixOS/marketing
-cloneit NixOS/mobile-nixos-website
-cloneit NixOS/moderation
-cloneit NixOS/mvn2nix-maven-plugin
-cloneit NixOS/nix
-cloneit NixOS/nix-book
-cloneit NixOS/nix-constitutional-assembly
-cloneit NixOS/nix.dev
-cloneit NixOS/nix-eclipse
-cloneit NixOS/nixfmt
-cloneit NixOS/nix-idea
-cloneit NixOS/nix-mode
-cloneit NixOS/nixops
-cloneit NixOS/nixops-aws
-cloneit NixOS/nixops-dashboard
-cloneit NixOS/nixops-hetzner
-cloneit NixOS/nixos
-cloneit NixOS/nixos-artwork
-cloneit NixOS/nixos-channel-scripts
-cloneit NixOS/nixos-common-styles
-cloneit NixOS/nixos-hardware
-cloneit NixOS/nixos-homepage
-cloneit NixOS/nixos-metrics
-cloneit NixOS/nixos-planet
-cloneit NixOS/nixos-search
-cloneit NixOS/nixos-status
-cloneit NixOS/nixos-summer
-cloneit NixOS/nixos-weekly
-cloneit NixOS/nixos-wiki-infra
-cloneit NixOS/nixpart
-cloneit NixOS/nix-pills
-cloneit NixOS/nixpkgs
-cloneit NixOS/nixpkgs-channels
-cloneit NixOS/nixpkgs-committers
-cloneit NixOS/nixpkgs-merge-bot
-cloneit NixOS/nixpkgs-vet
-cloneit NixOS/npm2nix
-cloneit NixOS/ofborg
-cloneit NixOS/ofborg-viewer
-cloneit NixOS/org
-cloneit NixOS/package-list
-cloneit NixOS/patchelf
-cloneit NixOS/release-wiki
-cloneit NixOS/reproducible.nixos.org
-cloneit NixOS/rfc39
-cloneit NixOS/rfc39-record
-cloneit NixOS/rfcs
-cloneit NixOS/rfc-steering-committee
-cloneit NixOS/SC-election-2024
-cloneit NixOS/SC-election-2025
-cloneit NixOS/security
-cloneit NixOS/snapd-nix-base
-cloneit NixOS/surveys
-cloneit NixOS/systemd
-cloneit NixOS/teams-collaboration
-cloneit NixOS/templates
-cloneit NixOS/whats-new-in-nix
-cloneit numtide/nixos-facter
-cloneit rasmus-kirk/nixarr
-cloneit Ravencentric/awesome-arr
-cloneit rcambrj/nix-pia-vpn
-cloneit ryan4yin/nix-config
-cloneit ryan4yin/nixos-and-flakes-book
-cloneit SaschaKoenigStuff/dotfiles
-cloneit SaschaKoenigStuff/dotfiles-flake-demo
-cloneit SaschaKoenigStuff/helper-scripts
-cloneit SaschaKoenigStuff/home-config
-cloneit SaschaKoenigStuff/m3tam3re.com
-cloneit SaschaKoenigStuff/mautic-v5-portainer
-cloneit SaschaKoenigStuff/mixed-files
-cloneit SaschaKoenigStuff/n8n-demo-workflows
-cloneit SaschaKoenigStuff/nixcfg
-cloneit SaschaKoenigStuff/nix-flake-templates
-cloneit SaschaKoenigStuff/nixos-config
-cloneit SaschaKoenigStuff/nixos-generators
-cloneit SaschaKoenigStuff/nixpkgs-formatters
-cloneit SaschaKoenigStuff/password-store
-cloneit SaschaKoenigStuff/self-host-playbook
-cloneit SaschaKoenigStuff/self-host-playbook-base
-cloneit SaschaKoenigStuff/traefik-nixos
-cloneit tadfisher/gradle2nix
-cloneit thiagokokada/nix-alien
-cloneit vimjoyer/nixconf
+cloneit jnsgruk/nixos-config                           https://github.com
+cloneit librephoenix/nixos-config                      https://github.com
+cloneit mdlayher/homelab                               https://github.com
+cloneit Mic92/dotfiles                                 https://github.com
+cloneit Mic92/flake-fmt                                https://github.com
+cloneit Mic92/flake-linter                             https://github.com
+cloneit Mic92/nix-configs                              https://github.com
+cloneit Mic92/nix-update                               https://github.com
+cloneit Mic92/ssh-to-age                               https://github.com
+cloneit Mic92/ssh-to-pgp                               https://github.com
+cloneit Mic92/sops-nix                                 https://github.com
+cloneit Misterio77/flake-config                        https://github.com
+cloneit Misterio77/jenkins-nixos-tf                    https://github.com
+cloneit Misterio77/nix-config                          https://github.com
+cloneit Misterio77/nix-gaming                          https://github.com
+cloneit Misterio77/nix-minecraft                       https://github.com
+cloneit Misterio77/nix-starter-configs                 https://github.com
+cloneit nix-community/acpi_call                        https://github.com
+cloneit nix-community/all-cabal-json                   https://github.com
+cloneit nix-community/authentik-nix                    https://github.com
+cloneit nix-community/autofirma-nix                    https://github.com
+cloneit nix-community/awesome-nix                      https://github.com
+cloneit nix-community/browser-previews                 https://github.com
+cloneit nix-community/buildbot-nix                     https://github.com
+cloneit nix-community/buildcatrust                     https://github.com
+cloneit nix-community/builtwithnix.org                 https://github.com
+cloneit nix-community/bundix                           https://github.com
+cloneit nix-community/cache-nix-action                 https://github.com
+cloneit nix-community/carnix                           https://github.com
+cloneit nix-community/comma                            https://github.com
+cloneit nix-community/composer-local-repo-plugin       https://github.com
+cloneit nix-community/crate2nix                        https://github.com
+cloneit nix-community/cross-toolchains.nix             https://github.com
+cloneit nix-community/crystal2nix                      https://github.com
+cloneit nix-community/cuda-legacy                      https://github.com
+cloneit nix-community/darwin-build-box                 https://github.com
+cloneit nix-community/dconf2nix                        https://github.com
+cloneit nix-community/disko                            https://github.com
+cloneit nix-community/disko-templates                  https://github.com
+cloneit nix-community/dns.nix                          https://github.com
+cloneit nix-community/docker-nix                       https://github.com
+cloneit nix-community/docker-nixpkgs                   https://github.com
+cloneit nix-community/docnix                           https://github.com
+cloneit nix-community/dream2nix                        https://github.com
+cloneit nix-community/dream2nix-auto-test              https://github.com
+cloneit nix-community/dream2nix-nodejs-auto            https://github.com
+cloneit nix-community/dream2nix-pypi-most-popular      https://github.com
+cloneit nix-community/dreampkgs                        https://github.com
+cloneit nix-community/eask2nix                         https://github.com
+cloneit nix-community/emacs2nix                        https://github.com
+cloneit nix-community/emacs-overlay                    https://github.com
+cloneit nix-community/ethereum.nix                     https://github.com
+cloneit nix-community/fenix                            https://github.com
+cloneit nix-community/fetchTree-spec                   https://github.com
+cloneit nix-community/flake-compat                     https://github.com
+cloneit nix-community/flake-firefox-nightly            https://github.com
+cloneit nix-community/flake-gemini                     https://github.com
+cloneit nix-community/flakelight                       https://github.com
+cloneit nix-community/flake-nimble                     https://github.com
+cloneit nix-community/flake.nix                        https://github.com
+cloneit nix-community/.github                          https://github.com
+cloneit nix-community/gnome-session-ctl                https://github.com
+cloneit nix-community/goblin-signing                   https://github.com
+cloneit nix-community/gomod2nix                        https://github.com
+cloneit nix-community/go-nix                           https://github.com
+cloneit nix-community/google-summer-of-code            https://github.com
+cloneit nix-community/govendor                         https://github.com
+cloneit nix-community/hardware-mnt-reform              https://github.com
+cloneit nix-community/harmonia                         https://github.com
+cloneit nix-community/haumea                           https://github.com
+cloneit nix-community/home-manager                     https://github.com
+cloneit nix-community/hpe-ltfs                         https://github.com
+cloneit nix-community/hydra-check                      https://github.com
+cloneit nix-community/image-spec                       https://github.com
+cloneit nix-community/impermanence                     https://github.com
+cloneit nix-community/infra                            https://github.com
+cloneit nix-community/kde2nix                          https://github.com
+cloneit nix-community/kickstart-nix.nvim               https://github.com
+cloneit nix-community/label-approved                   https://github.com
+cloneit nix-community/lanzaboote                       https://github.com
+cloneit nix-community/ld-getby                         https://github.com
+cloneit nix-community/lib-aggregate                    https://github.com
+cloneit nix-community/linuxkit-nix                     https://github.com
+cloneit nix-community/linyaps-flake                    https://github.com
+cloneit nix-community/lorri                            https://github.com
+cloneit nix-community/luarocks-nix                     https://github.com
+cloneit nix-community/manix                            https://github.com
+cloneit nix-community/mavenix                          https://github.com
+cloneit nix-community/mediawiki-matrix-bot             https://github.com
+cloneit nix-community/meetup-london                    https://github.com
+cloneit nix-community/mineflake                        https://github.com
+cloneit nix-community/naersk                           https://github.com
+cloneit nix-community/namaka                           https://github.com
+cloneit nix-community/napalm                           https://github.com
+cloneit nix-community/neovim-nightly-overlay           https://github.com
+cloneit nix-community/nh                               https://github.com
+cloneit nix-community/nix                              https://github.com
+cloneit nix-community/nix4nvchad                       https://github.com
+cloneit nix-community/nix4vscode                       https://github.com
+cloneit nix-community/nixago                           https://github.com
+cloneit nix-community/nixago-extensions                https://github.com
+cloneit nix-community/nixbox                           https://github.com
+cloneit nix-community/nix-bundle                       https://github.com
+cloneit nix-community/nixd                             https://github.com
+cloneit nix-community/nix-data-science                 https://github.com
+cloneit nix-community/nix-direnv                       https://github.com
+cloneit nix-community/nixdoc                           https://github.com
+cloneit nix-community/nix-doom-emacs                   https://github.com
+cloneit nix-community/nix-emacs                        https://github.com
+cloneit nix-community/nix-environments                 https://github.com
+cloneit nix-community/nix-eval-jobs                    https://github.com
+cloneit nix-community/nix-github-actions               https://github.com
+cloneit nix-community/nixGL                            https://github.com
+cloneit nix-community/nixhelm                          https://github.com
+cloneit nix-community/nix-index                        https://github.com
+cloneit nix-community/nix-index-database               https://github.com
+cloneit nix-community/nix-init                         https://github.com
+cloneit nix-community/nix-installers                   https://github.com
+cloneit nix-community/nix-ld                           https://github.com
+cloneit nix-community/nix-ld-rs                        https://github.com
+cloneit nix-community/nix-melt                         https://github.com
+cloneit nix-community/NixNG                            https://github.com
+cloneit nix-community/nix-on-droid                     https://github.com
+cloneit nix-community/nix-on-droid-app                 https://github.com
+cloneit nix-community/nixops-datadog                   https://github.com
+cloneit nix-community/nixops-digitalocean              https://github.com
+cloneit nix-community/nixops-encrypted-links           https://github.com
+cloneit nix-community/nixops-gce                       https://github.com
+cloneit nix-community/nixops_hcloud                    https://github.com
+cloneit nix-community/nixops-libvirtd                  https://github.com
+cloneit nix-community/nixops-vbox                      https://github.com
+cloneit nix-community/nixos-anywhere                   https://github.com
+cloneit nix-community/nixos-anywhere-examples          https://github.com
+cloneit nix-community/nixos-apple-silicon              https://github.com
+cloneit nix-community/nixos-avf                        https://github.com
+cloneit nix-community/nixos-avf-image-app              https://github.com
+cloneit nix-community/nixos-cli                        https://github.com
+cloneit nix-community/nixos-cli-archive                https://github.com
+cloneit nix-community/nixos-facter                     https://github.com
+cloneit nix-community/nixos-facter-modules             https://github.com
+cloneit nix-community/nixos-gen-config                 https://github.com
+cloneit nix-community/nixos-generators                 https://github.com
+cloneit nix-community/nixos-images                     https://github.com
+cloneit nix-community/nixos-install-scripts            https://github.com
+cloneit nix-community/nixos-landscape                  https://github.com
+cloneit nix-community/nixos-modules-contrib            https://github.com
+cloneit nix-community/nixos-vscode-server              https://github.com
+cloneit nix-community/NixOS-WSL                        https://github.com
+cloneit nix-community/nixpkgs                          https://github.com
+cloneit nix-community/nixpkgs-fmt                      https://github.com
+cloneit nix-community/nixpkgs.lib                      https://github.com
+cloneit nix-community/nixpkgs-lint                     https://github.com
+cloneit nix-community/nixpkgs-pytools                  https://github.com
+cloneit nix-community/nixpkgs-swh                      https://github.com
+cloneit nix-community/nixpkgs-terraform-providers-bin  https://github.com
+cloneit nix-community/nixpkgs-update                   https://github.com
+cloneit nix-community/nixpkgs-update-github-releases   https://github.com
+cloneit nix-community/nixpkgs-wayland                  https://github.com
+cloneit nix-community/nixpkgs-xr                       https://github.com
+cloneit nix-community/nix-review-tools                 https://github.com
+cloneit nix-community/nix-snapd                        https://github.com
+cloneit nix-community/nix-snippets                     https://github.com
+cloneit nix-community/nix-straight.el                  https://github.com
+cloneit nix-community/nixt                             https://github.com
+cloneit nix-community/nix-travis-ci                    https://github.com
+cloneit nix-community/nix-ts-mode                      https://github.com
+cloneit nix-community/nix-unit                         https://github.com
+cloneit nix-community/nix-unstable-installer           https://github.com
+cloneit nix-community/nix-user-chroot                  https://github.com
+cloneit nix-community/nixvim                           https://github.com
+cloneit nix-community/nix-vscode-extensions            https://github.com
+cloneit nix-community/nix-zsh-completions              https://github.com
+cloneit nix-community/noogle                           https://github.com
+cloneit nix-community/npmlock2nix                      https://github.com
+cloneit nix-community/nsncd                            https://github.com
+cloneit nix-community/NUR                              https://github.com
+cloneit nix-community/nur-combined                     https://github.com
+cloneit nix-community/nurl                             https://github.com
+cloneit nix-community/nur-packages-template            https://github.com
+cloneit nix-community/nur-search                       https://github.com
+cloneit nix-community/nur-update                       https://github.com
+cloneit nix-community/patsh                            https://github.com
+cloneit nix-community/pip2nix                          https://github.com
+cloneit nix-community/pipewire-to-json                 https://github.com
+cloneit nix-community/plasma-manager                   https://github.com
+cloneit nix-community/pnpm2nix                         https://github.com
+cloneit nix-community/poetry2nix                       https://github.com
+cloneit nix-community/preservation                     https://github.com
+cloneit nix-community/projects                         https://github.com
+cloneit nix-community/pruned-racket-catalog            https://github.com
+cloneit nix-community/pynixutil                        https://github.com
+cloneit nix-community/pypi2nix                         https://github.com
+cloneit nix-community/pypi2nix-overrides               https://github.com
+cloneit nix-community/queued-build-hook                https://github.com
+cloneit nix-community/raspberry-pi-nix                 https://github.com
+cloneit nix-community/redoxpkgs                        https://github.com
+cloneit nix-community/review-bot                       https://github.com
+cloneit nix-community/rfc39-record                     https://github.com
+cloneit nix-community/rfc55                            https://github.com
+cloneit nix-community/rkwifibt                         https://github.com
+cloneit nix-community/rnix-hashes                      https://github.com
+cloneit nix-community/rnix-lsp                         https://github.com
+cloneit nix-community/rnix-parser                      https://github.com
+cloneit nix-community/robotnix                         https://github.com
+cloneit nix-community/rustowl-flake                    https://github.com
+cloneit nix-community/setup.nix                        https://github.com
+cloneit nix-community/srvos                            https://github.com
+cloneit nix-community/steam-fetcher                    https://github.com
+cloneit nix-community/stylix                           https://github.com
+cloneit nix-community/talon-nix                        https://github.com
+cloneit nix-community/templates                        https://github.com
+cloneit nix-community/terraform-nixos                  https://github.com
+cloneit nix-community/todomvc-nix                      https://github.com
+cloneit nix-community/travis-build                     https://github.com
+cloneit nix-community/tree-sitter-nix                  https://github.com
+cloneit nix-community/trustix                          https://github.com
+cloneit nix-community/vagrant-nixos-plugin             https://github.com
+cloneit nix-community/vgo2nix                          https://github.com
+cloneit nix-community/vscode-nix-ide                   https://github.com
+cloneit nix-community/vs-overlay                       https://github.com
+cloneit nix-community/vulnix                           https://github.com
+cloneit nix-community/wiki                             https://github.com
+cloneit nix-community/yarn2nix                         https://github.com
+cloneit nix-community/zephyr-nix                       https://github.com
+cloneit nix-community/zon2nix                          https://github.com
+cloneit nix-community/ZurichZHF                        https://github.com
+cloneit NixOS/20th-nix                                 https://github.com
+cloneit NixOS/aarch64-build-box                        https://github.com
+cloneit NixOS/amis                                     https://github.com
+cloneit NixOS/branding                                 https://github.com
+cloneit NixOS/bundlers                                 https://github.com
+cloneit NixOS/cabal2nix                                https://github.com
+cloneit NixOS/calamares-nixos-extensions               https://github.com
+cloneit NixOS/darwin-stubs                             https://github.com
+cloneit NixOS/distribution-nixpkgs                     https://github.com
+cloneit NixOS/docker                                   https://github.com
+cloneit NixOS/equinix-metal-builders                   https://github.com
+cloneit NixOS/experimental-nix-installer               https://github.com
+cloneit NixOS/first-time-contribution-tagger           https://github.com
+cloneit NixOS/flake-registry                           https://github.com
+cloneit NixOS/flake-regressions                        https://github.com
+cloneit NixOS/flake-regressions-data                   https://github.com
+cloneit NixOS/foundation                               https://github.com
+cloneit NixOS/.github                                  https://github.com
+cloneit NixOS/GSoC                                     https://github.com
+cloneit NixOS/hackage-db                               https://github.com
+cloneit NixOS/hydra                                    https://github.com
+cloneit NixOS/hydra-ant-logger                         https://github.com
+cloneit NixOS/hydra-provisioner                        https://github.com
+cloneit NixOS/hydra-scale-equinix-metal                https://github.com
+cloneit NixOS/images                                   https://github.com
+cloneit NixOS/infra                                    https://github.com
+cloneit NixOS/jailbreak-cabal                          https://github.com
+cloneit NixOS/language-nix                             https://github.com
+cloneit NixOS/marketing                                https://github.com
+cloneit NixOS/mobile-nixos-website                     https://github.com
+cloneit NixOS/moderation                               https://github.com
+cloneit NixOS/mvn2nix-maven-plugin                     https://github.com
+cloneit NixOS/nix                                      https://github.com
+cloneit NixOS/nix-book                                 https://github.com
+cloneit NixOS/nix-constitutional-assembly              https://github.com
+cloneit NixOS/nix.dev                                  https://github.com
+cloneit NixOS/nix-eclipse                              https://github.com
+cloneit NixOS/nixfmt                                   https://github.com
+cloneit NixOS/nix-idea                                 https://github.com
+cloneit NixOS/nix-mode                                 https://github.com
+cloneit NixOS/nixops                                   https://github.com
+cloneit NixOS/nixops-aws                               https://github.com
+cloneit NixOS/nixops-dashboard                         https://github.com
+cloneit NixOS/nixops-hetzner                           https://github.com
+cloneit NixOS/nixos                                    https://github.com
+cloneit NixOS/nixos-artwork                            https://github.com
+cloneit NixOS/nixos-channel-scripts                    https://github.com
+cloneit NixOS/nixos-common-styles                      https://github.com
+cloneit NixOS/nixos-hardware                           https://github.com
+cloneit NixOS/nixos-homepage                           https://github.com
+cloneit NixOS/nixos-metrics                            https://github.com
+cloneit NixOS/nixos-planet                             https://github.com
+cloneit NixOS/nixos-search                             https://github.com
+cloneit NixOS/nixos-status                             https://github.com
+cloneit NixOS/nixos-summer                             https://github.com
+cloneit NixOS/nixos-weekly                             https://github.com
+cloneit NixOS/nixos-wiki-infra                         https://github.com
+cloneit NixOS/nixpart                                  https://github.com
+cloneit NixOS/nix-pills                                https://github.com
+cloneit NixOS/nixpkgs                                  https://github.com
+cloneit NixOS/nixpkgs-channels                         https://github.com
+cloneit NixOS/nixpkgs-committers                       https://github.com
+cloneit NixOS/nixpkgs-merge-bot                        https://github.com
+cloneit NixOS/nixpkgs-vet                              https://github.com
+cloneit NixOS/npm2nix                                  https://github.com
+cloneit NixOS/ofborg                                   https://github.com
+cloneit NixOS/ofborg-viewer                            https://github.com
+cloneit NixOS/org                                      https://github.com
+cloneit NixOS/package-list                             https://github.com
+cloneit NixOS/patchelf                                 https://github.com
+cloneit NixOS/release-wiki                             https://github.com
+cloneit NixOS/reproducible.nixos.org                   https://github.com
+cloneit NixOS/rfc39                                    https://github.com
+cloneit NixOS/rfc39-record                             https://github.com
+cloneit NixOS/rfcs                                     https://github.com
+cloneit NixOS/rfc-steering-committee                   https://github.com
+cloneit NixOS/SC-election-2024                         https://github.com
+cloneit NixOS/SC-election-2025                         https://github.com
+cloneit NixOS/security                                 https://github.com
+cloneit NixOS/snapd-nix-base                           https://github.com
+cloneit NixOS/surveys                                  https://github.com
+cloneit NixOS/systemd                                  https://github.com
+cloneit NixOS/teams-collaboration                      https://github.com
+cloneit NixOS/templates                                https://github.com
+cloneit NixOS/whats-new-in-nix                         https://github.com
+cloneit numtide/nixos-facter                           https://github.com
+cloneit rasmus-kirk/nixarr                             https://github.com
+cloneit Ravencentric/awesome-arr                       https://github.com
+cloneit rcambrj/nix-pia-vpn                            https://github.com
+cloneit ryan4yin/nix-config                            https://github.com
+cloneit ryan4yin/nixos-and-flakes-book                 https://github.com
+cloneit tadfisher/gradle2nix                           https://github.com
+cloneit thiagokokada/nix-alien                         https://github.com
+cloneit vimjoyer/nixconf                               https://github.com
+cloneit m3tam3re/dotfiles                              https://code.m3ta.dev
+cloneit m3tam3re/dotfiles-flake-demo                   https://code.m3ta.dev
+cloneit m3tam3re/helper-scripts                        https://code.m3ta.dev
+cloneit m3tam3re/home-config                           https://code.m3ta.dev
+cloneit m3tam3re/m3tam3re.com                          https://code.m3ta.dev
+cloneit m3tam3re/mautic-v5-portainer                   https://code.m3ta.dev
+cloneit m3tam3re/mixed-files                           https://code.m3ta.dev
+cloneit m3tam3re/n8n-demo-workflows                    https://code.m3ta.dev
+cloneit m3tam3re/nixcfg                                https://code.m3ta.dev
+cloneit m3tam3re/nix-flake-templates                   https://code.m3ta.dev
+cloneit m3tam3re/nixos-config                          https://code.m3ta.dev
+cloneit m3tam3re/nixos-generators                      https://code.m3ta.dev
+cloneit m3tam3re/nixpkgs-formatters                    https://code.m3ta.dev
+cloneit m3tam3re/password-store                        https://code.m3ta.dev
+cloneit m3tam3re/self-host-playbook                    https://code.m3ta.dev
+cloneit m3tam3re/self-host-playbook-base               https://code.m3ta.dev
+cloneit m3tam3re/traefik-nixos                         https://code.m3ta.dev

@@ -39,11 +39,13 @@ case ${deployType} in
     cmd="${cmd} ${args}"
     ;;
   deploy)
-    args=".#${host}"
+    args=""
+    args="${args} .#${host}"
 
     cmd="nix"
     cmd="${cmd} run"
     cmd="${cmd} github:serokell/deploy-rs"
+    cmd="${cmd} --show-trace"
     cmd="${cmd} --"
     cmd="${cmd} ${args}"
     ;;
@@ -74,6 +76,7 @@ case ${deployType} in
     ;;
   rebuild)
     args="switch"
+    args="${args} --show-trace"
     args="${args} --flake"
     args="${args} .#${host}"
 

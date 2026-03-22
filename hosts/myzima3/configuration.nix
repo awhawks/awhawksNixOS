@@ -13,19 +13,11 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ./disko-config.nix
+    #./disko-config.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
   ];
-
-  nix = {
-    #package = pkgs.nixFlakes;
-    settings = {
-        #experimental-features = [ "nix-command" "flakes" ];
-	trusted-users = [ "root" "awhawks" ];
-    };
-  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -35,12 +27,12 @@
   # Enable networking
   networking = {
     # Define your hostname.
-    hostName = "myzima2";
-    hostId = "31415926"; # CHANGE ME
+    hostName = "myzima3";
+    hostId = "31415927"; # CHANGE ME
     networkmanager.enable = true;
     interfaces.enp2s0.ipv4.addresses = [
       {
-        address = "192.168.2.2";
+        address = "192.168.2.3";
         prefixLength = 24;
       }
     ];
@@ -64,6 +56,22 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the Cinnamon Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.cinnamon.enable = true;
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -81,13 +89,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.mutableUsers = false;
-  users.users.backup = {
-    isNormalUser = true;
-    openssh.authorizedKeys.keys = [
-      ''command="${pkgs.rrsync}/bin/rrsync /rsync/backups/",restrict ${( builtins.readFile ../../home/awhawks/awhawks-ed25519-public )}''
-    ];
-  };
+  users.mutableUsers = true;
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -104,6 +106,7 @@
     docker-compose
     file
     firefox
+    gedit
     gh
     gitFull
     git-agecrypt
@@ -116,9 +119,6 @@
     nixVersions.latest
     nodejs_22
     pciutils
-    podman
-    podman-compose
-    podman-tui
     rrsync
     rsync
     ssh-to-age

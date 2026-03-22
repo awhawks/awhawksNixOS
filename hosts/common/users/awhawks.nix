@@ -34,7 +34,7 @@
       ( builtins.readFile ../../../home/awhawks/awhawks-ed25519-public )
     ];
     packages = [
-        inputs.home-manager.packages.${pkgs.system}.default
+        inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
   home-manager.users.awhawks =
