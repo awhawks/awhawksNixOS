@@ -7,10 +7,10 @@
     # look here for discussion https://discourse.nixos.org/t/nixos-21-11-plex-plexpass/17011/3
     services.plex = let plexpass = pkgs.plex.override {
       plexRaw = pkgs.plexRaw.overrideAttrs(old: rec {
-        version = "1.42.2.10156-f737b826c";
+        version = "1.43.1.10611-1e34174b1";
         src = pkgs.fetchurl {
           url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-          sha256 = "sha256-1ieh7qc1UBTorqQTKUQgKzM96EtaKZZ8HYq9ILf+X3M=";
+          sha256 = "sha256-pr1+VSObX0sBl/AddeG/+2dIbNdc+EtnvCzy4nTXVn8=";
         };
       });
     };

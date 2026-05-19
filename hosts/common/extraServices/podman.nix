@@ -14,7 +14,9 @@ in {
       podman = {
         enable = true;
         dockerCompat = true;
-        dockerSocket.enable = true;
+        dockerSocket = {
+	        enable = true;
+	      };
         autoPrune = {
           enable = true;
           dates = "weekly";
@@ -23,11 +25,22 @@ in {
             "--filter=label!=important"
           ];
         };
-        defaultNetwork.settings.dns_enabled = true;
+        defaultNetwork.settings = {
+	        dns_enabled = true;
+	      };
       };
     };
     environment.systemPackages = with pkgs; [
+      dive
       podman-compose
+      podman-tui
+      #passt
+      #slirp4netns
     ];
+    # Firewall configuration for reaparr which is a container
+    networking.firewall = {
+      allowPing = true;
+      allowedTCPPorts = [ 7000 ];
+    };
   };
 }

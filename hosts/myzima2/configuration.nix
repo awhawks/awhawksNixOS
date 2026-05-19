@@ -101,7 +101,6 @@
     compose2nix
     disko
     dive
-    docker-compose
     file
     firefox
     gh
