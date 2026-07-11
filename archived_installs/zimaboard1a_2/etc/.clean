@@ -1,6 +1,0 @@
-localtime
-mtab
-ssh/authorized_keys.d/awhawks
-ssh/authorized_keys.d/backup
-ssh/authorized_keys.d/root
-sudoers
