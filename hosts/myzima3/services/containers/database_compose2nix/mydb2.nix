@@ -99,4 +99,12 @@
     };
     wantedBy = [ "multi-user.target" ];
   };
+
+  networking.firewall.allowedTCPPorts = [
+    50000
+    55000
+    60006
+    60007
+  ];
+
 }

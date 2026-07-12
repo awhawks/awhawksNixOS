@@ -4,12 +4,10 @@
     #./database_compose2nix/mymongo.nix
   ];
 
-  networking.firewall.allowedTCPPorts = [
-    50000
-    55000
-    60006
-    60007
-    27017
-  ];
+  # TODO system.activationScripts.createPodmanNetworkWeb = lib.mkAfter ''
+  # TODO   if ! /run/current-system/sw/bin/podman network exists web; then
+  # TODO     /run/current-system/sw/bin/podman network create web --subnet=192.168.1.0/24 --internal
+  # TODO   fi
+  # TODO '';
 
 }

@@ -4,7 +4,6 @@
     ./arr_autobrr.nix
     ./arr_bazarr.nix
     ./arr_jellyfin.nix
-    ./arr_jellyseerr.nix
     ./arr_lidarr.nix
     ./arr_plex.nix
     #./arr_prowlarr.nix
@@ -12,6 +11,7 @@
     ./arr_readarr.nix
     ./arr_recyclarr.nix
     #./arr_sabnzbd.nix
+    ./arr_seerr.nix
     ./arr_sonarr.nix
     ./arr_tautulli.nix
     #./arr_transmission.nix

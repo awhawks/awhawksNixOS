@@ -42,15 +42,16 @@
 }: {
   imports = [
     ../common
-    ./services
     ./configuration.nix
     ./programs.nix
     ./secrets.nix
+    ./services
   ];
 
   extraServices = {
-    #docker.enable = true;
-    virtualisation.enable = false;
+    virtualisation = {
+        enable = false;
+    };
   };
 
 }

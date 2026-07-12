@@ -103,7 +103,7 @@
         modules = [
           ./hosts/myzima3
           agenix.nixosModules.default
-          #disko.nixosModules.disko
+          disko.nixosModules.disko
         ];
       };
     };

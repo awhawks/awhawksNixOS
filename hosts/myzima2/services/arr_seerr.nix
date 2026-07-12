@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: {
-    services.jellyseerr = {
+    services.seerr = {
         # Config data directory
         configDir = "/data/config/jellyseerr2";
         # Whether to enable Jellyseerr, a requests manager for Jellyfin.

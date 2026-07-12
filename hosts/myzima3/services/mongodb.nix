@@ -25,7 +25,7 @@
 
   environment.systemPackages = with pkgs; [
       mongodb-cli
-      mongodb-compass
+      # TODO mongodb-compass
       mongodb-tools
       mongosh
   ];

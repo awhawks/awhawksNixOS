@@ -119,13 +119,13 @@
         log5  = "log --graph --abbrev-commit --all --decorate=auto  --pretty=format:'%C(red)%h%Creset -%C(yellow)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset'";
         showColors = "log --pretty=format:'\t%C(dim red)dim red%Creset %C(red)red%Creset %C(bold red)bold red%Creset \t%C(dim green)dim green%Creset %C(green)green%Creset %C(bold green)bold green%Creset \t%C(dim yellow)dim yellow%Creset %C(yellow)yellow%Creset %C(bold yellow)bold yellow%Creset \t%C(dim blue)dim blue%Creset %C(blue)blue%Creset %C(bold blue)bold blue%Creset \t%C(dim magenta)dim magenta%Creset %C(magenta)magenta%Creset %C(bold magenta)bold magenta%Creset \t%C(dim cyan)dim cyan%Creset %C(cyan)cyan%Creset %C(bold cyan)bold cyan%Creset \t%C(dim white)dim white%Creset %C(white)white%Creset %C(bold white)bold white%Creset can also %C(ul red)ul red%Creset %C(blink green)blink green%Creset %C(reverse blue red)reverse blue red%Creset'";
       };
-      filter."lfs" = {
-        smudge         = "git-lfs smudge -- %f";
-        process        = "git-lfs filter-process";
-        required       = true;
-        clean          = "git-lfs clean -- %f";
-        useJGitBuiltin = true;
-      };
+      #filter."lfs" = {
+      #  smudge         = "git-lfs smudge -- %f";
+      #  process        = "git-lfs filter-process";
+      #  required       = true;
+      #  clean          = "git-lfs clean -- %f";
+      #  useJGitBuiltin = true;
+      #};
     };
   };
 
@@ -142,7 +142,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         user = "awhawks";
         identityFile = [

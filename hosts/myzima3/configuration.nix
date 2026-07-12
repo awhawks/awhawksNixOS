@@ -13,15 +13,22 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    #./disko-config.nix
+    ./disko-config.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
   ];
 
+  boot.kernel.sysctl = {
+    "fs.file-max" = "524288";
+  };
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  systemd.settings.Manager = {
+    DefaultLimitNOFILE = "65000:524288";
+  };
 
 
   # Enable networking

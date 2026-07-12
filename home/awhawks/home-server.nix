@@ -132,13 +132,13 @@
       safe = {
         directory      = "/media/nfs/plex/media/TV_Shows";
       };
-      filter."lfs" = {
-        smudge         = "git-lfs smudge -- %f";
-        process        = "git-lfs filter-process";
-        required       = true;
-        clean          = "git-lfs clean -- %f";
-        useJGitBuiltin = true;
-      };
+      #filter."lfs" = {
+      #  smudge         = "git-lfs smudge -- %f";
+      #  process        = "git-lfs filter-process";
+      #  required       = true;
+      #  clean          = "git-lfs clean -- %f";
+      #  useJGitBuiltin = true;
+      #};
     };
   };
 
@@ -155,7 +155,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         user = "awhawks";
         identityFile = [
